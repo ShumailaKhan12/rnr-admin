@@ -1,0 +1,992 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+
+:root {
+  --text-blue: #1a2a6c;
+  --muted-blue: #455a64;
+  --light-blue: #d2f1f9;
+  --text-orange: #ff741f;
+  --text-red: #da3c37;
+  --light-white: #f7f7f7;
+  --light-white-1: #f5f5f5;
+  --light-white-3: #fafafa;
+  --purple-color: #ba68c8;
+  --lavendar-color: #b399ff;
+  --border-light-purple: #c5cef1;
+  --leave-green: #64ad5a;
+  --green-color: #b5d35b;
+  --light-gray: #ebebeb;
+  --gray-color: #707070;
+  --border-gray-color: #a1a1a1;
+  --dark-gray-color: #373737;
+}
+
+// ================ Background Color ==============
+.bg-light-blue-color {
+  background-color: var(--light-blue);
+}
+
+.bg-blue-color {
+  background-color: var(--text-blue);
+}
+
+.bg-light-white-color {
+  background-color: var(--light-white);
+}
+
+.bg-light-white-1-color {
+  background-color: var(--light-white-1);
+}
+
+.bg-light-white-3-color {
+  background-color: var(--light-white-3);
+}
+
+.bg-light-gray-color {
+  background-color: var(--light-gray);
+}
+
+.bg-muted-blue-color {
+  background-color: var(--muted-blue);
+}
+
+.bg-live-green-color {
+  background-color: var(--leave-green);
+}
+
+.bg-purple-color {
+  background-color: var(--purple-color);
+}
+
+.bg-border-gray-color {
+  background-color: var(--border-gray-color);
+}
+
+// =============== Text Color ==================
+.text-blue-color {
+  color: var(--text-blue);
+}
+
+.text-gray-color {
+  color: var(--gray-color);
+}
+
+.text-dark-gray-color {
+  color: var(--dark-gray-color);
+}
+
+.text-live-green-color {
+  color: var(--leave-green) !important;
+}
+
+.text-border-gray-color {
+  color: var(--border-gray-color);
+}
+
+.text-muted-blue-color {
+  color: var(--muted-blue);
+}
+
+.text-red-color {
+  color: var(--text-red);
+}
+
+.text-purple-color {
+  color: var(--purple-color);
+}
+
+.text-brown-color {
+  color: #683c0e;
+}
+
+.pending-red-color {
+  color: #ff0000 !important;
+}
+
+.inner-table-meteors-orange {
+  background-color: #ff741f1a;
+}
+
+.inner-table-meteors-green {
+  background-color: #64ad5a1a;
+}
+
+.meteors-dot {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.dot-orange {
+  background-color: #ff741f;
+}
+
+// ======================================
+
+/* Inter: CSS class for a variable style */
+
+.inter-font-family-300 {
+  font-family: "Inter";
+  font-weight: 300;
+  font-style: normal;
+}
+
+.inter-font-family-400 {
+  font-family: "Inter";
+  font-weight: 400;
+  font-style: normal;
+}
+
+.inter-font-family-500 {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.inter-font-family-600 {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* ================ font size ================ */
+// .font-10 {
+//   font-size: 10px;
+// }
+
+// .font-14 {
+//   font-size: 14px;
+// }
+
+// .font-12 {
+//   font-size: 12px;
+// }
+
+// .font-16 {
+//   font-size: 16px !important;
+// }
+
+// .font-18 {
+//   font-size: 18px;
+// }
+
+// .font-20 {
+//   font-size: 20px;
+// }
+
+// .font-24 {
+//   font-size: 24px !important;
+// }
+
+// .font-28 {
+//   font-size: 28px;
+// }
+
+// .font-32 {
+//   font-size: 32px;
+// }
+
+// .font-34 {
+//   font-size: 34px;
+// }
+
+// .font-40 {
+//   font-size: 40px;
+// }
+
+// .font-44 {
+//   font-size: 44px;
+// }
+
+// .font-46 {
+//   font-size: 46px;
+// }
+
+/* ============================================ */
+
+// =========== Borders ==============
+.border-radiu-8 {
+  border-radius: 8px;
+}
+
+.border-radius-10 {
+  border-radius: 10px;
+}
+
+.border-radius-12 {
+  border-radius: 12px !important;
+}
+
+.border-radius-16 {
+  border-radius: 16px;
+}
+
+.border-top-left-right-12 {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.border-light-purple {
+  border: 1px solid var(--border-light-purple);
+}
+
+.border-blue {
+  border: 1px solid var(--text-blue);
+}
+
+.border-gray {
+  border: 1px solid var(--border-gray-color);
+}
+
+.border-light-gray {
+  border: 1px solid var(--light-gray) !important;
+}
+.border-bright-gray{
+  border: 1px solid #EAEAEA;
+}
+.border-purple {
+  border: 1px solid var(--purple-color);
+}
+
+// ====================  Box Shadow     ======================
+.box-shadow {
+  box-shadow: 0px 4px 16px 1px #0000001a;
+}
+
+// =======================    Width & Height  ============================
+.w-32 {
+  width: 32px;
+}
+
+.h-32 {
+  height: 32px;
+}
+
+// ===================     Navbar         =========================
+// .navbar{
+//   background-color: rgba(210, 241, 249, 0.9);
+// }
+.active-nav {
+  background-color: var(--text-blue);
+  /* light blue shade */
+  border-radius: 20px;
+  // padding: 5px 30px;
+  color: white !important;
+
+  .active-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.logo {
+  width: 100px;
+  height: 50px;
+}
+
+.user-icon {
+  width: 60px;
+  height: 60px;
+}
+.nav-user-text{
+  height: 60px;
+  width: 60px;
+}
+
+// Navbar Profile Modal
+
+.custom-dropdown-width {
+  min-width: 279px;
+  max-width: 100%;
+
+  .profile-header {
+    background-color: #ba68c833;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+}
+
+// =============== Dashboard Css Start Here =============
+.filter-btn {
+  border-radius: 8px;
+  border: 1px solid var(--light-gray);
+}
+
+.dashboard-card {
+  border-left: 2px solid var(--text-orange);
+}
+
+// ============  Product Cards Css ==============
+
+.product-card {
+  width: 155px;
+  background-color: #f3ecf4;
+  // flex: 0 0 auto;
+
+  .product-card-header {
+    background-color: rgba(186, 104, 200, 0.08);
+
+    .active-transparent-bg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .bg-transparent-green {
+      background-color: rgba(100, 173, 90, 0.2);
+    }
+
+    .bg-transparent-muted-blue {
+      background-color: rgba(69, 90, 100, 0.2);
+    }
+  }
+}
+
+.product-edit {
+  background-color: #ba68c814;
+  border-top-right-radius: 8px;
+}
+
+.live-circle {
+  width: 8px;
+  height: 8px;
+}
+
+.pause-btn {
+  background-color: rgba(69, 90, 100, 0.1);
+  padding-top: 5px;
+  padding-bottom: 4px;
+}
+
+.live-btn {
+  background-color: rgba(100, 173, 90, 0.1);
+  padding-top: 5px;
+  padding-bottom: 4px;
+}
+
+.custom-table-bg th,
+td,
+tr {
+  background: var(--light-white) !important;
+}
+
+.channel-table th,
+td {
+  color: var(--text-blue) !important;
+}
+
+.referral-bg-purple {
+  background-color: rgba(186, 104, 200, 0.12);
+}
+
+.leads-bg-yellow {
+  background-color: rgba(252, 244, 95, 0.15);
+}
+
+.share-bg-orange {
+  background-color: rgba(235, 130, 37, 0.15);
+}
+
+// -------------------  Media Query  -------------------------
+
+@media (min-width: 1280px) {
+  .reffer-card {
+    width: 100%;
+    min-width: 130px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-card {
+    width: 48%;
+  }
+
+  .graph-header-bg {
+    flex-direction: column !important;
+    align-items: flex-start;
+  }
+
+  .graph-filter {
+    text-align: left;
+    border-top-right-radius: 0px !important;
+  }
+
+  .graph-header-bg .p-3 {
+    padding-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-card {
+    width: 100%;
+  }
+}
+
+// -------------------- Referral & Rewards-----------------------
+.nav-tab-bg {
+  background-color: #c0ebf7;
+}
+
+.nav-link:focus,
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-blue);
+}
+
+.referrral-blank-card {
+  width: 100%;
+  height: 462px;
+}
+
+.reffer-card {
+  // background-color: #ba68c81a;
+  width: 170px;
+  // width: 100%;
+}
+
+.reward-history-table td {
+  background-color: rgba(186, 104, 200, 0.08) !important;
+}
+
+.referral-table-arrow {
+  background-color: #1a2a6c0d;
+}
+
+.reward-inner-table th,
+.reward-inner-table td {
+  background-color: #4934951a !important;
+}
+
+// --------------------- Graph Css Start Here   ------------------------
+.graph-header-bg {
+  background-color: rgba(186, 104, 200, 0.1);
+}
+
+.graph-filter {
+  border-top-right-radius: 12px;
+}
+
+.highcharts-credits {
+  display: none;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+}
+
+.dot-yellow {
+  background-color: #fcf45f;
+}
+
+.dot-green {
+  background-color: #b5d35b;
+}
+
+.dot-orange {
+  background-color: #ff741f;
+}
+
+.dot-purple {
+  background-color: #b399ff;
+}
+
+.invite-card {
+  background: linear-gradient(0deg, #F6F9FE 27.34%, #8FD3EA 56.12%, #493495 105.15%);
+  height: 218px;
+}
+
+// Copy button
+.divider-with-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: pxToRem(60) auto;
+  width: 40%;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #9D92D2;
+    width: 30%;
+  }
+
+  .divider-border {
+    margin: 0 pxToRem(10);
+    color: #9D92D2;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+}
+
+.social-nav {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+// -------------------------- Login Css Start Here  --------------------------
+.login-box {
+  // width: 465px;
+  height: 500px;
+  box-shadow: 0px 4px 12px 1px #00000026;
+}
+
+.login-input {
+  background-color: #ba68c81a;
+}
+
+.cross-icon {
+  width: 24px;
+  height: 24px;
+  background-color: #e4f7fb !important;
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+  /* hide Bootstrap default arrow */
+}
+
+// ---------------- Reward  Css ----------------------------
+.reward-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.reward-edit-icon {
+  background-color: #ba68c81a;
+  color: var(--text-blue);
+}
+
+.reward-attach-icon {
+  background-color: #683c0e26;
+  color: #683c0e;
+}
+
+.reward-edit-icon:hover {
+  background-color: #ba68c8;
+  color: white;
+}
+
+.reward-attach-icon:hover {
+  background-color: #683c0e;
+  color: white !important;
+}
+
+.reward-delete-icon {
+  background-color: #ff3b301a;
+  color: var(--text-red);
+}
+
+.reward-delete-icon:hover {
+  background-color: #ff3b30;
+  color: white;
+}
+
+.reward-plus-icon {
+  background-color: #64ad5a1a;
+  color: #64ad5a;
+}
+
+.reward-plus-icon:hover {
+  background-color: #64ad5a;
+  color: white;
+}
+
+.milky-dropdown {
+  background-color: #ba68c81a;
+  border-top-left-radius: 12px;
+}
+
+.milstone-tab1 {
+  border-top-left-radius: 16px !important;
+  border-bottom: 1px solid var(--purple-color) !important;
+}
+
+.milstone-tab2 {
+  border-top-right-radius: 16px !important;
+  border-bottom: 1px solid var(--purple-color) !important;
+}
+
+.tab-color {
+  color: var(--purple-color);
+}
+
+.nav-tabs .nav-link.active {
+  color: white;
+  background-color: var(--purple-color);
+  //  border-top-left-radius: 16px;
+}
+
+.upload-box input[type="file"] {
+  display: none;
+}
+
+// ----------  Scroll Css    ------------
+.scroll-height {
+  height: 380px;
+  overflow-y: auto;
+}
+
+.scroll-section {
+  height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+.table-body-scroll {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  display: none !important;
+  /* or height: 8px for horizontal */
+}
+
+// ----------------- Scroll bar Css -----------------
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--purple-color);
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
+/* Optional: On hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #6a006a;
+}
+
+// ------------------------- Exclusive Offer 7 eraning Table Css -------------------------
+.gray-box {
+  height: 200px;
+  background-color: #eaeaea;
+}
+
+.earning-circle-arrow {
+  width: 32px;
+  height: 32px;
+  background-color: rgba(26, 42, 108, 0.1);
+}
+
+.pills-tab .nav-link.active {
+  background-color: var(--purple-color) !important;
+  /* dark purple */
+  color: #fff !important;
+}
+
+.pills-tab .nav-link {
+  color: var(--purple-color);
+  border: 1px solid var(--purple-color);
+}
+
+.earning-table th {
+  background-color: #ba68c81a;
+  color: var(--text-blue);
+}
+
+.purple-checkbox {
+  accent-color: var(--purple-color);
+  /* Purple checkbox + tick */
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--purple-color) !important;
+  cursor: pointer;
+}
+
+// .earnings-expandable-container.expanded {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100vw;
+//   height: 100vh;
+//   background: white;
+//   z-index: 9999;
+//   overflow-y: auto;
+//   padding: 2rem;
+// }
+
+// .earnings-expandable-container.expanded .earning-circle-arrow {
+//   position: absolute;
+//   top: 1rem;
+//   right: 1rem;
+//   background-color: #f0f0f0;
+// }
+
+// body.overflow-hidden {
+//   overflow: hidden;
+// }
+
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+// --------------------- Miscellaneous Css Start Here ----------------------------
+.miscellaneous-screen-preview {
+  // width: ;
+  height: 605px;
+}
+
+.faq-add-btn {
+  width: 40px;
+  height: 40px;
+}
+
+.scrollable-card-wrapper {
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+// Pushup Notification Css Start Here
+.nav-underline {
+  gap: 50px;
+}
+
+.nav-underline .nav-link.active {
+  color: var(--text-blue);
+}
+
+.notification-table {
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: var(--light-white) !important;
+
+  th,
+  td {
+    vertical-align: middle;
+  }
+}
+
+.pushup-preview-box {
+  width: 458px;
+  height: 462px;
+}
+
+.push-edit-icon {
+  background-color: #1a2a6c1a;
+  color: var(--text-blue) !important;
+}
+
+.copy-icon {
+  background-color: #ba68c81a;
+  color: #ba68c8;
+}
+
+// --------------------------  Dashboard Schedule Card Css Start --------------------------------
+.schedule-card {
+  background: #ba68c814;
+}
+
+.schedule-right-side {
+  background-color: #ba68c814;
+}
+
+// Dashboard Error table Css
+.referral-bg-blue {
+  background-color: #1a2a6c1f;
+}
+
+.referral-bg-green {
+  background-color: #64ad5a1f;
+}
+
+.right-sidepanel {
+  border-bottom-left-radius: 24px;
+  border-top-left-radius: 24px;
+}
+
+.sidepanel-gray-text {
+  color: #a1a1a199;
+}
+
+.dropdown-item:hover {
+  background-color: #1a2a6c1a !important;
+  color: var(--text-blue) !important;
+}
+
+.dropdown-item:active {
+  color: var(--text-blue) !important;
+  text-decoration: none;
+  background-color: transparent !important;
+}
+
+.bg-purple {
+  background-color: #6f42c1 !important;
+}
+
+.hover-shadow {
+  transition: box-shadow 0.15s ease-in-out;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.transition {
+  transition: all 0.15s ease-in-out;
+}
+
+/* Custom nav pills styling */
+.nav-pills .nav-link.active {
+  background-color: #0d6efd;
+  border-bottom: 2px solid #0d6efd;
+}
+
+/* Footer backdrop blur */
+.fixed-bottom {
+  backdrop-filter: blur(10px);
+  background-color: rgba(248, 249, 250, 0.95) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .row .col-auto:not(:first-child) {
+    margin-top: 1rem;
+  }
+
+  .fixed-bottom .row {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .fixed-bottom .col:last-child {
+    justify-content: center !important;
+  }
+}
+
+// ===============================
+// Campaign Css Start Here
+// ===============================
+.campaign-card {
+  background-color: #BA68C814;
+
+  .campaign-img {
+    height: 60px;
+    width: 60px;
+    background-color: #D9D9D9;
+  }
+}
+
+// ===============================
+// Campaign Css Start Here
+// ===============================
+.campaign-card {
+  background-color: #BA68C814;
+
+  .campaign-img {
+    height: 60px;
+    width: 60px;
+    background-color: #D9D9D9;
+  }
+}
+
+.campaign-tab-bg {
+  background-color: #A1A1A11A;
+}
+
+.accordion,
+.accordion-button:not(.collapsed) {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  --bs-accordion-btn-focus-box-shadow: none !important;
+}
+
+input::placeholder {
+  color: var(--border-gray-color) !important;
+  font-size: 12px;
+}
+
+// ---- DASHBOARD MAIN FORM CSS ----
+.background-light-color {
+  background-color: #ffffffa8;
+}
+.new-milestone-form{
+    overflow: hidden;
+    height: 28rem;
+}
+.milestone-form-sect{
+    overflow: scroll;
+    height: 100%;
+    overflow-x: hidden;
+}
+// DASHBOARD MISCELLANROUS CSS
+  .inner-row-index {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-around;
+    margin-right: pxToRem(50);
+
+    .timeline-dot {
+      width: 14px;
+      height: 14px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      background-color: var(--text-blue);
+      opacity: 0;
+      z-index: 2;
+      transition: opacity 0.5s ease-in;
+
+      &.visible {
+        opacity: 1;
+      }
+
+      &:nth-of-type(1) {
+        left: 15%;
+      }
+
+      &:nth-of-type(2) {
+        left: 49%;
+      }
+
+      &:nth-of-type(3) {
+        left: 82%;
+      }
+    }
+
+
+  }
+
+  .howitworks-step {
+    opacity: 0;
+    transform: translateX(pxToRem(-100));
+    transition: all 0.1s ease-in-out;
+
+    &.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  .timeline-border {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 0;
+    border-top: 2px dashed black;
+    z-index: 0;
+    width: 100%;
+    animation: drawTimeline 5.5s linear forwards;
+
+  }
+
+  .rocket-gif {
+    position: absolute;
+    transform: translate(250%, -50%);
+    // left: 0;
+    // top: 33%;
+    width: 15%;
+    // margin-top: -7.5%;
+    // z-index: 2;
+    // animation: moveRocket 5s linear forwards;
+  }
