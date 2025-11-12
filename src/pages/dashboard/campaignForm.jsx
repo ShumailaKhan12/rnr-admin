@@ -67,7 +67,7 @@ const CampaignForm = () => {
   } = useForm();
 
   const { ContextToEditForm, ContextCampEditDataAPI } = useContext(UserContext);
-  console.log("ContextCampEditDataAPI: ", ContextCampEditDataAPI);
+  console.log("ContextCampEditDataAPI:xxxxxxxxxx ", ContextCampEditDataAPI);
   console.log("ContextToEditForm: ", ContextToEditForm);
 
   const GetAdminUid = sessionStorage.getItem("Auth");
@@ -410,8 +410,8 @@ const CampaignForm = () => {
   // Set Edit Form Data
   useEffect(() => {
     if (ContextToEditForm) {
-      console.log("ContextToEditForm: ", ContextToEditForm);
-      console.log("ContextCampEditDataAPI: ", ContextCampEditDataAPI);
+      // console.log("ContextToEditForm: ", ContextToEditForm);
+      // console.log("ContextCampEditDataAPI: ", ContextCampEditDataAPI);
       // Set Camp Details
       setValue("name", ContextCampEditDataAPI?.campaign_info?.program_name);
       setValue("url", ContextCampEditDataAPI?.campaign_info?.base_url);

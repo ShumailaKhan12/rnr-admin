@@ -455,11 +455,20 @@ const CampaignNavbar = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { setLogo, setContextToEditForm, setAuthLocal } = useContext(UserContext);
+    const campaignName = sessionStorage.getItem("campaignName");
+    console.log('campaignName: ', campaignName);
+    const { logo, setLogo, setContextToEditForm, setAuthLocal } = useContext(UserContext);
     const ProgramId = sessionStorage.getItem("Prgid");
     const [profileData, setProfileData] = useState();
 
-    const isMyCampaignsActive = location.pathname === "/";
+    useEffect(() => {
+        const storedLogo = localStorage.getItem("logo");
+        if (storedLogo) {
+            setLogo(storedLogo);
+        }
+    }, []);
+
+    const isDashboardActive = location.pathname === "/dashboard";
     const isCreateCampaignActive = location.pathname === "/campaignform";
 
     const [passwords, setPasswords] = useState({
@@ -563,20 +572,36 @@ const CampaignNavbar = () => {
                 <Container>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav" className="justify-content-between mt-60">
-                        <Navbar.Brand href="/dashboard" className="width-26">
-                            <img src={Logo} alt="Logo" className="logo" />
 
-                        </Navbar.Brand>
+                        {isDashboardActive ? (
+
+                            <>
+                                <Navbar.Brand href="/dashboard" className="width-26">
+                                    {logo !== "undefined" ? (
+                                        <img src={logo} alt="Logo" className="logo" />
+                                    ) : (
+                                        <div className="nav-user-text mb-0 text-white font-20 montserrat-semibold text-uppercase bg-border-gray-color rounded-circle d-flex align-items-center justify-content-center shadow">
+                                            <span className="font-20"> {campaignName?.slice(0, 2) || "CAM"}</span>
+                                        </div>
+                                    )}
+                                </Navbar.Brand>
+                            </>
+                        ) : (
+                            <>
+                                <Navbar.Brand href="/dashboard" className="width-26">
+                                    <img src={Logo} alt="Logo" className="logo" />
+                                </Navbar.Brand>
+                            </>)}
                         <Nav className="d-flex flex-wrap align-items-center justify-content-center gap-3 flex-row mt-3 mt-lg-0 ms-auto">
-                            {/* <NavLink to="/dashboardcampaign">
+                            {!isDashboardActive && <NavLink to="/dashboard">
                                 <Button
-                                    btn_title="My Campaigns"
-                                    btn_class={`px-5 ${isMyCampaignsActive
+                                    btn_title="Dashboard"
+                                    btn_class={`px-5 ${isDashboardActive
                                         ? "bg-blue-color text-white border-0"
                                         : "bg-transparent border-blue text-blue-color"
                                         }`}
                                 />
-                            </NavLink> */}
+                            </NavLink>}
                             <NavLink to="/campaignform">
                                 {/* <Button btn_title={"Create Campaign"} icon={<GoPlus className="font-18" />} btn_class={"bg-transparent border-blue text-blue-color px-5"} onClick={() => setContextToEditForm(false)} /> */}
                                 <Button
@@ -589,16 +614,22 @@ const CampaignNavbar = () => {
                                         }`}
                                 />
                             </NavLink>
-                            <Nav.Link href="#deets" className="font-32 text-blue-color ms-3 text-border-gray-color pe-none">
+                            {isDashboardActive && <NavLink
+                                to="/dashboard-campaigns"
+                                className={`nav-link text-blue-color bg-transparent border-blue mt-lg-0 mt-2 rounded-pill py-2 d-flex align-itmes-center justify-content-center font-14 montserrat-semibold me-3 px-5`}
+                            >
+                                <span>My Campaigns</span>
+                            </NavLink>}
+                            {/* <Nav.Link href="#deets" className="font-32 text-blue-color ms-3 text-border-gray-color pe-none">
                                 <GoBell />
-                            </Nav.Link>
-                            <Nav.Link
+                            </Nav.Link> */}
+                            {/* <Nav.Link
                                 eventKey={2}
                                 href="#memes"
                                 className="font-32 text-border-gray-color pe-none"
                             >
                                 <IoSettingsOutline />
-                            </Nav.Link>
+                            </Nav.Link> */}
 
                             <div className="dropdown">
                                 <button
