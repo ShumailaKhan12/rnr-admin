@@ -1068,11 +1068,13 @@ const CampaignForm = () => {
                             </div>
                           ))}
                         </div>
+                        
                       </div>
+                      
                     </div>
                   )
                 )}
-                  <div className="pt-4">
+                  <div className="mb-10">
                   <Button
                     type="button"
                     onClick={() => SetNoGalaxy((prev) => prev + 1)}
