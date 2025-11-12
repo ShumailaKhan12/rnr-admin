@@ -123,16 +123,15 @@ const CampaignDashboard = () => {
       };
 
       const response = await postData(`/admin/edit/${GetAdminUid}`, payload);
-      console.log("🟢 Full API Response:", response);
+      console.log(" Full API Response:", response);
 
-      // ✅ Fix: Your backend returns `program_details` array
       if (response?.program_details?.length > 0) {
         setcampList(response.program_details);
       } else {
         setcampList([]);
       }
     } catch (error) {
-      console.log("❌ Error loading campaigns:", error);
+      console.log("Error loading campaigns:", error);
       toastError("Failed to load campaigns");
     }
   };
@@ -269,11 +268,8 @@ const CampaignDashboard = () => {
                                     onClick={() => {
                                       localStorage.setItem(
                                         "editProgramData",
-                                        JSON.stringify({
-                                          program_id: program?.program_id,
-                                          basic_info: basic,
-                                        })
-                                      );
+                                        JSON.stringify(program))
+                                        setContextToEditForm(true);
                                     }}
                                   >
                                     <button
