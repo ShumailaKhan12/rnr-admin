@@ -2101,6 +2101,7 @@ import { postData } from "../../services/api";
 import { DecryptFunction } from "../../utils/decryptFunction";
 import { toastError, toastSuccess } from "../../utils/toster";
 import leftarrow from "../../assets/images/Dashboard-img/leftarrow.svg";
+import CampaignNavbar from "../../components/campaignNavbar";
 
 const products = [
   { name: "Product Name", oldPrice: 1000, newPrice: 800, status: "live" },
@@ -2414,7 +2415,8 @@ const Dashboard = () => {
 
   return (
     <>
-      <NavBar />
+      {/* <NavBar /> */}
+      <CampaignNavbar />
       <div className="bg-light-white-3-color py-5">
         <div className="container">
           <div className="d-flex align-items-center justify-content-between">
@@ -2427,12 +2429,12 @@ const Dashboard = () => {
                 and analysis
               </p>
             </div>
-            <div className="bg-light-white-1-color filter-btn px-3 py-2 d-flex justify-content-between align-items-center">
+            {/* <div className="bg-light-white-1-color filter-btn px-3 py-2 d-flex justify-content-between align-items-center">
               <p className="mb-0 text-blue-color montserrat-medium font-14 me-2">
                 Filter{" "}
               </p>
               <img src={Filter} alt="Filter" />
-            </div>
+            </div> */}
           </div>
 
           {/* -------- DashBoard Cards Start Here ------------- */}

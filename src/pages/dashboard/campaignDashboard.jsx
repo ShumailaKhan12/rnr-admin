@@ -110,7 +110,7 @@ const CampaignDashboard = () => {
   //     console.log("error: ", error);
   //   }
   // };
- const HandleMainDashdAPI = async () => {
+  const HandleMainDashdAPI = async () => {
     try {
       const getAuth = await postData("/admin/auths", {
         admin_uid: GetAdminUid,
@@ -209,48 +209,48 @@ const CampaignDashboard = () => {
                   <p className="text-blue-color font-12 montserrat-medium">Create, manage, and monitor all your campaigns from one place.</p>
 
                   <div className="d-flex flex-column gap-3">
-                 {campList?.map((program, i) =>
-  program?.basic_info?.map((basic, index) => (
-    <div
-      key={`${i}-${index}`}
-      className="card campaign-card border-radius-12 border-0 hover-shadow transition"
-    >
-      <div className="card-body px-4 py-3">
-        <div className="row align-items-center">
-          <div className="col-auto d-flex align-items-center gap-3">
-            <div
-              className="campaign-img text-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden"
-            >
-              <img
-                src={basic?.logo || "https://via.placeholder.com/60"}
-                className="logo"
-                alt="Logo"
-              />
-            </div>
-            <div>
-              <h5 className="mb-0 text-blue-color font-28 montserrat-semibold">
-                {basic?.program_name || "Unnamed Program"}
-              </h5>
-              <p className="mb-0 text-muted" style={{ fontSize: "12px" }}>
-                Loyalty Program
-              </p>
-            </div>
-          </div>
+                    {campList?.map((program, i) =>
+                      program?.basic_info?.map((basic, index) => (
+                        <div
+                          key={`${i}-${index}`}
+                          className="card campaign-card border-radius-12 border-0 hover-shadow transition"
+                        >
+                          <div className="card-body px-4 py-3">
+                            <div className="row align-items-center">
+                              <div className="col-auto d-flex align-items-center gap-3">
+                                <div
+                                  className="campaign-img text-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden"
+                                >
+                                  <img
+                                    src={basic?.logo || "https://via.placeholder.com/60"}
+                                    className="logo"
+                                    alt="Logo"
+                                  />
+                                </div>
+                                <div>
+                                  <h5 className="mb-0 text-blue-color font-28 montserrat-semibold">
+                                    {basic?.program_name || "Unnamed Program"}
+                                  </h5>
+                                  <p className="mb-0 text-muted" style={{ fontSize: "12px" }}>
+                                    Loyalty Program
+                                  </p>
+                                </div>
+                              </div>
 
-          <div className="col-auto mx-auto">
-            <div className="text-center text-blue-color">
-              <div className="font-32 montserrat-semibold mb-0">
-                {basic?.total_participants || 0}
-              </div>
-              <div className="small font-16 montserrat-medium">
-                Total Participants
-              </div>
-            </div>
-          </div>
+                              <div className="col-auto mx-auto">
+                                <div className="text-center text-blue-color">
+                                  <div className="font-32 montserrat-semibold mb-0">
+                                    {basic?.total_participants || 0}
+                                  </div>
+                                  <div className="small font-16 montserrat-medium">
+                                    Total Participants
+                                  </div>
+                                </div>
+                              </div>
 
-          <div className="col-auto">
-            <div className="d-flex gap-3 align-items-center">
-              {/* <NavLink to="/dashboard">
+                              <div className="col-auto">
+                                <div className="d-flex gap-3 align-items-center">
+                                  {/* <NavLink to="/dashboard">
                 <button
                   onClick={() => {
                     sessionStorage.setItem("Prgid", program?.program_id);
@@ -264,40 +264,40 @@ const CampaignDashboard = () => {
                 </button>
               </NavLink> */}
 
-            <NavLink
-  to="/campaignform"
-  onClick={() => {
-    localStorage.setItem(
-      "editProgramData",
-      JSON.stringify({
-        program_id: program?.program_id,
-        basic_info: basic,
-      })
-    );
-  }}
->
-  <button
-    className="border-purple text-purple-color font-14 montserrat-medium rounded-pill bg-transparent px-4 py-2 d-flex align-items-center gap-2"
-  >
-    Edit
-  </button>
-</NavLink>
+                                  <NavLink
+                                    to="/campaignform"
+                                    onClick={() => {
+                                      localStorage.setItem(
+                                        "editProgramData",
+                                        JSON.stringify({
+                                          program_id: program?.program_id,
+                                          basic_info: basic,
+                                        })
+                                      );
+                                    }}
+                                  >
+                                    <button
+                                      className="border-purple text-purple-color font-14 montserrat-medium rounded-pill bg-transparent px-4 py-2 d-flex align-items-center gap-2"
+                                    >
+                                      Edit
+                                    </button>
+                                  </NavLink>
 
 
-              {/* <div
+                                  {/* <div
                 data-bs-toggle="modal"
                 data-bs-target={`#deleteModal-${program?.program_id}`}
                 style={{ cursor: "pointer" }}
               >
                 <RiDeleteBin5Fill className="font-24 text-danger mt-2" />
               </div> */}
-            </div>
-          </div>
-        </div>
-      </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-      {/* Delete Modal */}
-      {/* <div
+                          {/* Delete Modal */}
+                          {/* <div
         className="modal fade"
         id={`deleteModal-${program?.program_id}`}
         tabIndex="-1"
@@ -340,9 +340,9 @@ const CampaignDashboard = () => {
           </div>
         </div>
       </div> */}
-    </div>
-  ))
-)}
+                        </div>
+                      ))
+                    )}
 
                   </div>
                 </>

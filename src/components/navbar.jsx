@@ -380,7 +380,7 @@ const NavBar = () => {
   const { logo, setLogo, setAuthLocal } = useContext(UserContext);
   const [profileData, setProfileData] = useState();
   console.log('profileData: ', profileData);
-
+11
   useEffect(() => {
     const storedLogo = localStorage.getItem("logo");
     if (storedLogo) {
@@ -504,7 +504,7 @@ const NavBar = () => {
               >
                 <span>My Campaigns</span>
               </NavLink>
-              <Nav.Link href="#deets" className="font-32 text-border-gray-color pe-none">
+              {/* <Nav.Link href="#deets" className="font-32 text-border-gray-color pe-none">
                 <GoBell />
               </Nav.Link>
               <Nav.Link
@@ -513,7 +513,7 @@ const NavBar = () => {
                 className="font-32 text-border-gray-color pe-none"
               >
                 <IoSettingsOutline />
-              </Nav.Link>
+              </Nav.Link> */}
 
               <div className="dropdown">
                 <button
