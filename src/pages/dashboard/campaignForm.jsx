@@ -622,7 +622,7 @@ const CampaignForm = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+        <form onSubmit={handleSubmit(onSubmit)}  onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
           onChange={(e) => e.target.type === "submit" && e.preventDefault()}
         >
           <div className="campaign-tab-bg d-flex justify-content-between align-items-center">
@@ -679,12 +679,12 @@ const CampaignForm = () => {
               )}
             </div>
             {ContextToEditForm ? (
-              // 🛠 Edit Mode
+            
               <>
                 {activeTab === "tab4" ? (
                   <button
-                    type="submit"
-                    onClick={handleSubmit(onSubmit)} // ✅ Submits only on click
+                    type="button"
+                    onClick={handleSubmit(onSubmit)} 
                     className="border-0 bg-blue-color text-white px-4 py-2"
                   >
                     Submit
@@ -704,7 +704,7 @@ const CampaignForm = () => {
               <>
                 {activeTab === "tab4" ? (
                   <button
-                    type="submit"
+                    type="button"
                     onClick={handleSubmit(onSubmit)}
                     className="border-0 bg-blue-color text-white px-4 py-2"
                   >
@@ -1078,10 +1078,10 @@ const CampaignForm = () => {
                   <Button
                     type="button"
                     onClick={() => SetNoGalaxy((prev) => prev + 1)}
-                    btn_class={`border-purple bg-transparent px-4 w-25 ${isFirstGalaxyValid ? "text-purple-color" : "text-gray-color opacity-50 cursor-not-allowed"
+                    btn_class={`border-purple bg-transparent px-4 w-25 ${isFirstGalaxyValid && !ContextToEditForm ? "text-purple-color" : "text-gray-color opacity-50 cursor-not-allowed"
                       }`}
                     btn_title="Create New"
-                    disabled={!isFirstGalaxyValid}
+                    disabled={!isFirstGalaxyValid || ContextToEditForm}
                   />
                 </div>
               </>
