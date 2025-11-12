@@ -62,8 +62,10 @@ const CampaignForm = () => {
     setValue,
     formState: { errors, isSubmitting },
     watch,
+    reset,
     trigger,
   } = useForm();
+
   const { ContextToEditForm, ContextCampEditDataAPI } = useContext(UserContext);
   console.log("ContextCampEditDataAPI: ", ContextCampEditDataAPI);
   console.log("ContextToEditForm: ", ContextToEditForm);
@@ -106,9 +108,48 @@ const CampaignForm = () => {
   //=============
 
   // Active Tab Function
-  const goToNextTab = () => {
+  // const goToNextTab = () => {
+  //   const currentIndex = tabs.findIndex((tab) => tab.key === activeTab);
+  //   const nextTab = tabs[currentIndex + 1];
+  //   if (nextTab) {
+  //     setEnabledTabs((prev) =>
+  //       prev.includes(nextTab.key) ? prev : [...prev, nextTab.key]
+  //     );
+  //     setActiveTab(nextTab.key);
+  //   }
+  // };
+
+  const galaxies = watch("galaxies") || [];
+  const isFirstGalaxyValid =
+    galaxies.length > 0 &&
+    galaxies[0]?.galaxy_name?.trim() &&
+    galaxies[0]?.total_milestones &&
+    Number(galaxies[0]?.total_milestones) > 0;
+
+
+  const goToNextTab = async () => {
     const currentIndex = tabs.findIndex((tab) => tab.key === activeTab);
     const nextTab = tabs[currentIndex + 1];
+
+    // Define required fields per tab
+    const tabFields = {
+      tab1: ["program_name"],
+      tab2: ["galaxies"],
+      tab3: ["invite_link", "start_date", "end_date", "referrer_reward_type", "referrer_reward_value"],
+      tab4: ["joining_bonus", "meteors_referral", "stars_joining", "link_validity", "meteor", "y_star"],
+    };
+
+    if (!ContextToEditForm) {
+      // Validate only in create mode
+      const fieldsToValidate = tabFields[activeTab];
+      const isValid = await trigger(fieldsToValidate, { shouldFocus: true });
+
+      if (!isValid) {
+        toastError("Please fill all required fields before proceeding!");
+        return;
+      }
+    }
+
     if (nextTab) {
       setEnabledTabs((prev) =>
         prev.includes(nextTab.key) ? prev : [...prev, nextTab.key]
@@ -116,6 +157,7 @@ const CampaignForm = () => {
       setActiveTab(nextTab.key);
     }
   };
+
 
   // Upload Logo function
   const handleCampLogoUpload = (e) => {
@@ -212,6 +254,8 @@ const CampaignForm = () => {
       setLoading(false);
     }
   };
+
+
   const handlePrimarySelect = (platform) => {
     setPrimarySelected(platform);
     setPrimaryShare(platform); // update primaryShare icon
@@ -233,38 +277,49 @@ const CampaignForm = () => {
       // participant-table
       const payload = {
         admin_uid: GetAdminUid,
-        galaxies: data?.galaxies,
-        link: data?.invite_link,
-        joining_bonus: data?.joining_bonus,
-        link_validity: data?.link_validity,
-        meteor: data?.meteor,
-        meteors_referral: data?.meteors_referral,
-        stars_joining: data?.stars_joining,
-        y_star: data?.y_star,
-        program_name :data?.program_name,
+        galaxies: data?.galaxies || [],
+        link: data?.invite_link || "",
+        joining_bonus: data?.joining_bonus ?? 0,
+        link_validity: data?.link_validity ?? 0,
+        meteor: data?.meteor ?? 1,
+        meteors_referral: data?.meteors_referral ?? 0,
+        stars_joining: data?.stars_joining ?? 0,
+        y_star: data?.y_star ?? 1,
+        program_name: data?.program_name || "",
       };
-      
 
-      let response;
-      if (ContextToEditForm) {
-        const program_id = ContextCampEditDataAPI?.campaign_info?.program_id;
-
-        // Update campaign logic
-        const updateUrl = `/admin/update-campaign/${program_id}`;
-        response = await postData(updateUrl, payload);
-      } else {
-        // Create campaign logic
-        const addrewards = `/admin/add-rewards/${GetAdminUid}`;
-        response = await postData(addrewards, payload);
+      if (ContextToEditForm && ContextCampEditDataAPI?.campaign_info?.program_id) {
+        payload.program_id = ContextCampEditDataAPI.campaign_info.program_id;
       }
 
-      console.log("response: ", response);
+
+      const apiUrl = `/admin/add-rewards/${GetAdminUid}`;
+      const response = await postData(apiUrl, payload);
+
+
+      // if (ContextToEditForm) {
+      //   const program_id = ContextCampEditDataAPI?.campaign_info?.program_id;
+
+      //   // Update campaign logic
+      //   const updateUrl = `/admin/update-campaign/${program_id}`;
+      //   response = await postData(updateUrl, payload);
+      // } else {
+      //   // Create campaign logic
+      //   const addrewards = `/admin/add-rewards/${GetAdminUid}`;
+      //   response = await postData(addrewards, payload);
+      // }
+
       if (response?.success) {
-        toastSuccess(response?.message);
+        toastSuccess(
+          ContextToEditForm
+            ? "Campaign updated successfully!"
+            : "Campaign created successfully!"
+        );
         navigate("/dashboard-campaigns");
       }
     } catch (error) {
-      toastError(error?.message);
+      console.error("Error while saving campaign:", error);
+      toastError("Something went wrong while saving the campaign!");
     }
     //   const response = await postData("/admin/create-campaign", payload);
     //   console.log("response: ", response);
@@ -277,6 +332,24 @@ const CampaignForm = () => {
     //   toastError(error?.message);
     // }
   };
+
+
+  useEffect(() => {
+    if (!ContextToEditForm) {
+      reset({
+        program_name: "",
+        joining_bonus: "",
+        meteors_referral: "",
+        stars_joining: "",
+        link_validity: "",
+        meteor: "",
+        y_star: "",
+        galaxies: [],
+      });
+      localStorage.removeItem("editProgramData");
+    }
+  }, [ContextToEditForm, reset]);
+
 
   const handleUrlBlur = (e) => {
     try {
@@ -295,21 +368,43 @@ const CampaignForm = () => {
   };
 
 
-   const [campLogo, setCampLogo] = useState(null);
-   useEffect(() => {
+
+  useEffect(() => {
     const stored = localStorage.getItem("editProgramData");
     if (stored) {
       const data = JSON.parse(stored);
-      const info = data?.basic_info;
 
-      // prefill form fields
-      setValue("program_name", info?.program_name || "");
-      setCampLogo(info?.logo || null);
+      // Extract actual details
+      const program = data?.basic_info?.[0] || {};
+      const galaxies = data?.galaxies || [];
+      const rewards = data?.rewards_rule?.[0] || {};
 
-      // Optional: remove after use so next form starts fresh
-      localStorage.removeItem("editProgramData");
+      // Reset form with full structure
+      reset({
+        program_name: program?.program_name || "",
+        logo: program?.logo || "",
+        galaxies: galaxies.map((g) => ({
+          galaxy_name: g.galaxy_name,
+          stars: g.stars_to_be_achieved,
+          total_milestones: g.milestones.length,
+          milestones: g.milestones.map((m) => ({
+            milestone_name: m.milestone_name,
+            display_message: m.display_message,
+            referrals_required_to_unlock: m.referrals_required_to_unlock,
+            meteors_required_to_unlock: m.meteors_required_to_unlock,
+            milestone_description: m.milestone_description,
+          })),
+        })),
+        joining_bonus: rewards.joining_bonus_meteors,
+        meteors_referral: rewards.meteors_per_referral,
+        stars_joining: rewards.stars_on_joining,
+        link_validity: rewards.link_validity_days,
+        meteor: rewards.meteors_to_rupees_rate,
+        y_star: rewards.meteors_to_rupees_rate, // adjust if needed
+      });
     }
-  }, [setValue]);
+  }, [reset]);
+
 
 
   // Set Edit Form Data
@@ -527,7 +622,9 @@ const CampaignForm = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+          onChange={(e) => e.target.type === "submit" && e.preventDefault()}
+        >
           <div className="campaign-tab-bg d-flex justify-content-between align-items-center">
             {/* <p className='mb-0 text-blue-color font-16'>Info</p> */}
             <div className="container ps-5">
@@ -545,9 +642,8 @@ const CampaignForm = () => {
                     <Nav.Item key={tab.key}>
                       <Nav.Link
                         eventKey={tab.key}
-                        className={`font-16 montserrat-semibold text-border-gray-color ${
-                          !enabledTabs.includes(tab.key) ? "disabled-tab" : ""
-                        }`}
+                        className={`font-16 montserrat-semibold text-border-gray-color ${!enabledTabs.includes(tab.key) ? "disabled-tab" : ""
+                          }`}
                         disabled={!enabledTabs.includes(tab.key)}
                       >
                         {tab.label}{" "}
@@ -570,10 +666,9 @@ const CampaignForm = () => {
                     <Nav.Item key={tab.key}>
                       <Nav.Link
                         eventKey={tab.key}
-                        className={`font-16 montserrat-semibold text-blue-color ${
-                          enabledTabs.includes(tab.key) ? "disabled-tab" : ""
-                        }`}
-                        // disabled={!enabledTabs.includes(tab.key)}
+                        className={`font-16 montserrat-semibold text-blue-color ${enabledTabs.includes(tab.key) ? "disabled-tab" : ""
+                          }`}
+                      // disabled={!enabledTabs.includes(tab.key)}
                       >
                         {tab.label}{" "}
                         <IoIosArrowForward className="mx-1 font-20" />
@@ -583,12 +678,13 @@ const CampaignForm = () => {
                 </Nav>
               )}
             </div>
-            {!ContextToEditForm ? (
+            {ContextToEditForm ? (
+              // 🛠 Edit Mode
               <>
                 {activeTab === "tab4" ? (
                   <button
-                    // onClick={goToNextTab}
                     type="submit"
+                    onClick={handleSubmit(onSubmit)} // ✅ Submits only on click
                     className="border-0 bg-blue-color text-white px-4 py-2"
                   >
                     Submit
@@ -604,118 +700,124 @@ const CampaignForm = () => {
                 )}
               </>
             ) : (
-              <button
-                // onClick={goToNextTab}
-                type="submit"
-                className="border-0 bg-blue-color text-white px-4 py-2"
-              >
-                Submit
-              </button>
+
+              <>
+                {activeTab === "tab4" ? (
+                  <button
+                    type="submit"
+                    onClick={handleSubmit(onSubmit)}
+                    className="border-0 bg-blue-color text-white px-4 py-2"
+                  >
+                    Submit
+                  </button>
+                ) : (
+                  <button
+                    onClick={goToNextTab}
+                    type="button"
+                    className="border-0 bg-blue-color text-white px-4 py-2"
+                  >
+                    Next <IoIosArrowForward className="ms-2" />
+                  </button>
+                )}
+              </>
             )}
           </div>
 
           <div className="container py-3">
             {/* Tab1 content Start here */}
-{activeTab === "tab1" && (
-  <>
-    <div className="camp-form row border-radius-16 py-4">
-      <div className="col-lg-6">
-        {/* Campaign Name */}
-        <div className="mb-3">
-          <label
-            htmlFor="campaignName"
-            className="form-label font-14 text-gray-color montserrat-regular"
-          >
-            Campaign Name
-          </label>
-          <input
-            id="campaignName"
-            {...register("program_name", {
-              required: "Campaign name is required",
-            })}
-            className="form-control border-0 border-radiu-8 login-input text-blue-color montserrat-medium"
-            placeholder="Enter campaign name"
-          />
-          {errors.program_name && (
-            <p className="text-danger">{errors.program_name.message}</p>
-          )}
-        </div>
+            {activeTab === "tab1" && (
+              <>
+                <div className="camp-form row border-radius-16 py-4">
+                  <div className="col-lg-6">
+                    {/* Campaign Name */}
+                    <div className="mb-3">
+                      <label
+                        htmlFor="campaignName"
+                        className="form-label font-14 text-gray-color montserrat-regular"
+                      >
+                        Campaign Name
+                      </label>
+                      <input
+                        id="campaignName"
+                        {...register("program_name", {
+                          required: "Campaign name is required",
+                        })}
+                        className="form-control border-0 border-radiu-8 login-input text-blue-color montserrat-medium"
+                        placeholder="Enter campaign name"
+                      />
+                      {errors.program_name && (
+                        <p className="text-danger">{errors.program_name.message}</p>
+                      )}
+                    </div>
 
-        {/* Company Logo */}
-        <div className="mb-4">
-          <label className="form-label font-14 text-gray-color montserrat-regular">
-            Company Logo
-          </label>
-          <div className="d-flex align-items-center gap-3">
-            {CampLogo ? (
-              <div className="position-relative">
-                <img
-                  src={CampLogo}
-                  alt="Logo preview"
-                  className="rounded border"
-                  style={{
-                    width: "64px",
-                    height: "64px",
-                    objectFit: "cover",
-                  }}
-                />
-                <button
-                  type="button"
-                  className="btn btn-sm btn-danger position-absolute top-0 end-0 rounded-circle p-1"
-                  style={{
-                    transform: "translate(50%, -50%)",
-                    width: "24px",
-                    height: "24px",
-                  }}
-                  onClick={() => setCampLogo(null)}
-                >
-                  <IoClose size={14} />
-                </button>
-              </div>
-            ) : (
-              <div
-                className="border border-2 login-input border-dashed rounded d-flex align-items-center justify-content-center text-muted"
-                style={{
-                  width: "64px",
-                  height: "64px",
-                }}
-              >
-                <span>+</span>
-              </div>
+                    {/* Company Logo */}
+                    <div className="mb-4">
+                      <label className="form-label font-14 text-gray-color montserrat-regular">
+                        Company Logo
+                      </label>
+                      <div className="d-flex align-items-center gap-3">
+                        {CampLogo ? (
+                          <div className="position-relative">
+                            <img
+                              src={CampLogo}
+                              alt="Logo preview"
+                              className="rounded border"
+                              style={{
+                                width: "64px",
+                                height: "64px",
+                                objectFit: "cover",
+                              }}
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-danger position-absolute top-0 end-0 rounded-circle p-1"
+                              style={{
+                                transform: "translate(50%, -50%)",
+                                width: "24px",
+                                height: "24px",
+                              }}
+                              onClick={() => setCampLogo(null)}
+                            >
+                              <IoClose size={14} />
+                            </button>
+                          </div>
+                        ) : (
+                          <div
+                            className="border border-2 login-input border-dashed rounded d-flex align-items-center justify-content-center text-muted"
+                            style={{
+                              width: "64px",
+                              height: "64px",
+                            }}
+                          >
+                            <span>+</span>
+                          </div>
+                        )}
+                        <div>
+                          <label className="upload-box d-flex text-center login-input bg-light-white-3-color p-2 rounded-3 text-blue-color font-12 montserrat-medium">
+                            Upload Image
+                            <input
+                              type="file"
+                              id="formFile"
+                              {...register("logo")}
+                              onChange={(e) => handleCampLogoUpload(e)}
+                            />
+                          </label>
+                          <div className="form-text font-12 montserrat-medium text-gray-color">
+                            Upload PNG, JPG, or GIF. Max size: 2MB
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
             )}
-            <div>
-              <label className="upload-box d-flex text-center login-input bg-light-white-3-color p-2 rounded-3 text-blue-color font-12 montserrat-medium">
-                Upload Image
-                <input
-                  type="file"
-                  id="formFile"
-                  {...register("logo")}
-                  onChange={(e) => handleCampLogoUpload(e)}
-                />
-              </label>
-              <div className="form-text font-12 montserrat-medium text-gray-color">
-                Upload PNG, JPG, or GIF. Max size: 2MB
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </>
-)}
 
 
             {/* Tab2 content Start here */}
             {activeTab === "tab2" && (
               <>
-                <div className="pt-4">
-                  <Button
-                    type="button"
-                    onClick={() => SetNoGalaxy((prev) => prev + 1)}
-                    btn_class="border-purple bg-transparent px-4 w-25 text-purple-color"
-                    btn_title="Create New"
-                  />
-                </div>
+              
                 {Array.from({ length: Number(NoGalaxy) || 1 })?.map(
                   (_, galaxyIndex) => (
                     <div className="row py-4">
@@ -758,6 +860,13 @@ const CampaignForm = () => {
                               <input
                                 type="number"
                                 placeholder="Y Stars"
+                                min="0"
+                                onKeyDown={(e) => {
+                                  if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                }}
+                                onInput={(e) => {
+                                  if (e.target.value < 0) e.target.value = 0;
+                                }}
                                 className="form-control login-input rounded-3 border-0 py-2 text-blue-color montserrat-medium"
                                 {...register(`galaxies.${galaxyIndex}.stars`)}
                               />
@@ -807,9 +916,8 @@ const CampaignForm = () => {
                               className="milestone-form row"
                             >
                               <hr
-                                className={`${
-                                  milestoneIndex == 0 ? "d-none" : ""
-                                }`}
+                                className={`${milestoneIndex == 0 ? "d-none" : ""
+                                  }`}
                               />
                               <p className="font-18 montserrat-semibold text-border-gray-color mb-0">
                                 Milestone {milestoneIndex + 1}
@@ -878,6 +986,13 @@ const CampaignForm = () => {
                                 </label>
                                 <input
                                   id="referrals_required_to_unlock"
+                                  min="0"
+                                  onKeyDown={(e) => {
+                                    if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                  }}
+                                  onInput={(e) => {
+                                    if (e.target.value < 0) e.target.value = 0;
+                                  }}
                                   {...register(
                                     `galaxies.${galaxyIndex}.milestones.${milestoneIndex}.referrals_required_to_unlock`,
                                     {
@@ -907,6 +1022,13 @@ const CampaignForm = () => {
                                 </label>
                                 <input
                                   id="meteorsRequired"
+                                  min="0"
+                                  onKeyDown={(e) => {
+                                    if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                  }}
+                                  onInput={(e) => {
+                                    if (e.target.value < 0) e.target.value = 0;
+                                  }}
                                   {...register(
                                     `galaxies.${galaxyIndex}.milestones.${milestoneIndex}.meteors_required_to_unlock`,
                                     {
@@ -950,6 +1072,16 @@ const CampaignForm = () => {
                     </div>
                   )
                 )}
+                  <div className="pt-4">
+                  <Button
+                    type="button"
+                    onClick={() => SetNoGalaxy((prev) => prev + 1)}
+                    btn_class={`border-purple bg-transparent px-4 w-25 ${isFirstGalaxyValid ? "text-purple-color" : "text-gray-color opacity-50 cursor-not-allowed"
+                      }`}
+                    btn_title="Create New"
+                    disabled={!isFirstGalaxyValid}
+                  />
+                </div>
               </>
             )}
 
@@ -1497,14 +1629,23 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
+                            min="0"
+                            onKeyDown={(e) => {
+                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                            }}
+                            onInput={(e) => {
+                              if (e.target.value < 0) e.target.value = 0;
+                            }}
+
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("joining_bonus", {
                               required: "Joining bonus is required",
+                              min: { value: 0, message: "Value cannot be negative" },
                               setValueAs: (value) =>
                                 value ? Number(value) : 0, // Convert value to number
                             })}
                           />
-                          {errors.refer_reward && (
+                          {errors.joining_bonus && (
                             <p className="text-danger">
                               {errors.joining_bonus.message}
                             </p>
@@ -1518,14 +1659,23 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
+                            min="0"
+                            onKeyDown={(e) => {
+                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                            }}
+                            onInput={(e) => {
+                              if (e.target.value < 0) e.target.value = 0;
+                            }}
+
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("meteors_referral", {
                               required: "Meteors referral is required",
+                              min: { value: 0, message: "Value cannot be negative" },
                               setValueAs: (value) =>
                                 value ? Number(value) : 0, // Convert value to number
                             })}
                           />
-                          {errors.refer_reward && (
+                          {errors.mete && (
                             <p className="text-danger">
                               {errors.meteors_referral.message}
                             </p>
@@ -1539,14 +1689,23 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
+                            min="0"
+                            onKeyDown={(e) => {
+                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                            }}
+                            onInput={(e) => {
+                              if (e.target.value < 0) e.target.value = 0;
+                            }}
+
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("stars_joining", {
                               required: "Stars joining is required",
+                              min: { value: 0, message: "Value cannot be negative" },
                               setValueAs: (value) =>
                                 value ? Number(value) : 0, // Convert value to number
                             })}
                           />
-                          {errors.refer_reward && (
+                          {errors.stars_joining && (
                             <p className="text-danger">
                               {errors.stars_joining.message}
                             </p>
@@ -1560,14 +1719,23 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
+                            min="0"
+                            onKeyDown={(e) => {
+                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                            }}
+                            onInput={(e) => {
+                              if (e.target.value < 0) e.target.value = 0;
+                            }}
+
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("link_validity", {
                               required: "",
+                              min: { value: 0, message: "Value cannot be negative" },
                               setValueAs: (value) =>
                                 value ? Number(value) : 0, // Convert value to number
                             })}
                           />
-                          {errors.refer_reward && (
+                          {errors.link_validity && (
                             <p className="text-danger">
                               {errors.link_validity.message}
                             </p>
@@ -1595,12 +1763,20 @@ const CampaignForm = () => {
                               className="form-control login-input border-radiu-8 font-14 py-2 border-0"
                               placeholder="For every X Meteor"
                               type="number"
+                              min="0"
+                              onKeyDown={(e) => {
+                                if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                              }}
+                              onInput={(e) => {
+                                if (e.target.value < 0) e.target.value = 0;
+                              }}
+
                               name=""
                               id=""
                               {...register("meteor", {
                                 required: "meteor is required",
                                 setValueAs: (value) =>
-                                value ? Number(value) : 0, // Convert value to number
+                                  value ? Number(value) : 0, // Convert value to number
                               })}
                             />
                             {errors.meteor && (
@@ -1615,12 +1791,20 @@ const CampaignForm = () => {
                               className="form-control login-input border-radiu-8 font-14 py-2 border-0"
                               placeholder="Rupees Rate"
                               type="number"
+                              min="0"
+                              onKeyDown={(e) => {
+                                if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                              }}
+                              onInput={(e) => {
+                                if (e.target.value < 0) e.target.value = 0;
+                              }}
+
                               name=""
                               id=""
                               {...register("y_star", {
                                 required: "Rupees Rate is required",
                                 setValueAs: (value) =>
-                                value ? Number(value) : 0, // Convert value to number
+                                  value ? Number(value) : 0, // Convert value to number
                               })}
                             />
                             {errors.y_star && (
