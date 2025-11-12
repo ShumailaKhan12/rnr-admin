@@ -414,7 +414,7 @@ const NavBar = () => {
         username: data?.name,
         email: data?.email,
         mobile_number: data?.mobile,
-        image: image,
+        image: data.image,
         password: data?.password,
       };
       const response = await postData("/admin/edit-profile", payload);

@@ -62,7 +62,7 @@ const CampaignDashboard = () => {
         // Create preview
         const reader = new FileReader();
         reader.onload = (e) => {
-          setLogoPreview(e.target.result);
+          setLogoPreview(reader.result);
         };
         reader.readAsDataURL(file);
       } else {
@@ -218,14 +218,32 @@ const CampaignDashboard = () => {
                             <div className="row align-items-center">
                               <div className="col-auto d-flex align-items-center gap-3">
                                 <div
-                                  className="campaign-img text-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden"
-                                >
-                                  <img
-                                    src={basic?.logo || "https://via.placeholder.com/60"}
-                                    className="logo"
-                                    alt="Logo"
-                                  />
-                                </div>
+  className="campaign-img text-white rounded-circle d-flex align-items-center justify-content-center overflow-hidden"
+  style={{
+    width: "64px",
+    height: "64px",
+    backgroundColor: basic?.logo ? "transparent" : "#6f42c1", // purple background if no logo
+    fontSize: "20px",
+    fontWeight: "600",
+    textTransform: "uppercase",
+  }}
+>
+  {basic?.logo ? (
+    <img
+      src={basic.logo}
+      alt="Logo"
+      style={{
+        width: "100%",
+        height: "100%",
+        objectFit: "cover",
+        borderRadius: "50%",
+      }}
+    />
+  ) : (
+    (basic?.program_name?.substring(0, 2) || "NA")
+  )}
+</div>
+
                                 <div>
                                   <h5 className="mb-0 text-blue-color font-28 montserrat-semibold">
                                     {basic?.program_name || "Unnamed Program"}
@@ -269,7 +287,7 @@ const CampaignDashboard = () => {
                                       localStorage.setItem(
                                         "editProgramData",
                                         JSON.stringify(program))
-                                        setContextToEditForm(true);
+                                      setContextToEditForm(true);
                                     }}
                                   >
                                     <button
