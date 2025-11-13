@@ -79,6 +79,7 @@ const CampaignForm = () => {
   const [Loading, setLoading] = useState(false);
   const [CampLogo, SetCampLogo] = useState();
   const [NoGalaxy, SetNoGalaxy] = useState(1);
+  const [galaxyData, setGalaxyData] = useState([]);
   const [InviteLink, SetInviteLink] = useState();
   const [activeTab, setActiveTab] = useState(tabs[0].key);
   const [enabledTabs, setEnabledTabs] = useState([tabs[0].key]);
@@ -402,10 +403,17 @@ const CampaignForm = () => {
         meteor: rewards.meteors_to_rupees_rate,
         y_star: rewards.meteors_to_rupees_rate, // adjust if needed
       });
+       setGalaxyData(galaxies);
+
+    
+     SetNoGalaxy(galaxies.length);
     }
+
+    
   }, [reset]);
 
 
+  
 
   // Set Edit Form Data
   useEffect(() => {
@@ -604,6 +612,7 @@ const CampaignForm = () => {
     }
   };
 
+  
   return (
     <>
       <div className="min-vh-100 bg-light-white-3-color">
@@ -829,7 +838,7 @@ const CampaignForm = () => {
                             className="row"
                           >
                             <h5 className=" font-18 montserrat-semibold text-gray-color mb-0">
-                              Create New Galaxy {galaxyIndex + 1}
+                              Edit Galaxy  {galaxyIndex + 1}
                             </h5>
                             <p className="text-blue-color font-12 montserrat-medium">
                               This is the first level of the reward and referral

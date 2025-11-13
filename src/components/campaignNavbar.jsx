@@ -604,8 +604,7 @@ const CampaignNavbar = () => {
                                         }`}
                                 />
                             </NavLink>}
-                            <NavLink to="/campaignform">
-                                {/* <Button btn_title={"Create Campaign"} icon={<GoPlus className="font-18" />} btn_class={"bg-transparent border-blue text-blue-color px-5"} onClick={() => setContextToEditForm(false)} /> */}
+                            {/* <NavLink to="/campaignform">
                                 <Button
                                     btn_title="Create Campaign"
                                     icon={<GoPlus className="font-18" />}
@@ -615,7 +614,7 @@ const CampaignNavbar = () => {
                                         : "bg-transparent border-blue text-blue-color"
                                         }`}
                                 />
-                            </NavLink>
+                            </NavLink> */}
                             {/* {isDashboardActive && <NavLink
                                 to="/campaignform"
                                 className={`nav-link text-blue-color bg-transparent border-blue mt-lg-0 mt-2 rounded-pill py-2 d-flex align-itmes-center justify-content-center font-14 montserrat-semibold me-3 px-5`}
