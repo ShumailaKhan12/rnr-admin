@@ -316,8 +316,8 @@
 //               <label className="form-label text-blue-color font-12 montserrat-semibold">
 //                 Upload Picture
 //               </label>
-//               <label class="upload-box d-flex text-center login-input px-4 py-5 rounded-3 text-blue-color font-12 width-40 justify-content-center flex-column montserrat-medium">
-//                 <div class="upload-icon mx-auto text-center">
+//               <label className="upload-box d-flex text-center login-input px-4 py-5 rounded-3 text-blue-color font-12 width-40 justify-content-center flex-column montserrat-medium">
+//                 <div className="upload-icon mx-auto text-center">
 //                   <PiUploadSimpleBold className="font-16" />
 //                 </div>
 //                 Upload
@@ -325,7 +325,7 @@
 //               </label>
 //             </div>
 //             <Button
-//               btn_class={"text-white px-5 bg-blue-color w-100 border-0"}
+//               btn_className={"text-white px-5 bg-blue-color w-100 border-0"}
 //               btn_title={"Save Changes"}
 //             />
 //             {/* <button type='submit' className="rounded-pill font-14 montserrat-medium border-0 text-white bg-blue-color px-3 w-100 py-2">Save Changes</button> */}
@@ -695,8 +695,8 @@ const NavBar = () => {
               <label className="form-label text-blue-color font-12 montserrat-semibold">
                 Upload Picture
               </label>
-              <label class="upload-box d-flex text-center login-input px-4 py-5 rounded-3 text-blue-color font-12 width-40 justify-content-center flex-column montserrat-medium">
-                <div class="upload-icon mx-auto text-center">
+              <label className="upload-box d-flex text-center login-input px-4 py-5 rounded-3 text-blue-color font-12 width-40 justify-content-center flex-column montserrat-medium">
+                <div className="upload-icon mx-auto text-center">
                   <PiUploadSimpleBold className="font-16" />
                 </div>
                 Upload
@@ -704,7 +704,7 @@ const NavBar = () => {
               </label>
             </div>
             <Button
-              btn_class={"text-white px-5 bg-blue-color w-100 border-0"}
+              btn_className={"text-white px-5 bg-blue-color w-100 border-0"}
               btn_title={"Save Changes"}
             />
             {/* <button type='submit' className="rounded-pill font-14 montserrat-medium border-0 text-white bg-blue-color px-3 w-100 py-2">Save Changes</button> */}

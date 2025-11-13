@@ -71,7 +71,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Dashboarcampaigns from "../../pages/dashboard/campaignDashboard";
+// import Dashboarcampaigns from "../../pages/dashboard/campaignDashboard";
 import Dashboard from "../../pages/dashboard/dashboard";
 import ReferralsRewards from "../../pages/referralsRewards/referralsRewards";
 import EarningRedemption from "../../pages/earningRedemptions/earningRedemption";
@@ -110,14 +110,14 @@ const AppRoutes = () => {
         <Route path="/forgot" element={<Forgot />} />
 
         {/* Protected Routes */}
-        <Route
+        {/* <Route
           path="/dashboard-campaigns"
           element={
             <PrivateRoute>
               <Dashboarcampaigns />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/dashboard"
           element={
