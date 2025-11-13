@@ -315,7 +315,7 @@ const CampaignForm = () => {
             ? "Campaign updated successfully!"
             : "Campaign created successfully!"
         );
-        navigate("/dashboard-campaigns");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.error("Error while saving campaign:", error);

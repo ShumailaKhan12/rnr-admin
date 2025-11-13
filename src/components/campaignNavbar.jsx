@@ -561,6 +561,8 @@ const CampaignNavbar = () => {
     useEffect(() => {
         HandleDashBoardAPI();
     }, []);
+
+    
     return (
         <>
             <Navbar
@@ -578,7 +580,7 @@ const CampaignNavbar = () => {
                             <>
                                 <Navbar.Brand href="/dashboard" className="width-26">
                                     {logo !== "undefined" ? (
-                                        <img src={logo} alt="Logo" className="logo" />
+                                        <img src={Logo} alt="Logo" className="logo" />
                                     ) : (
                                         <div className="nav-user-text mb-0 text-white font-20 montserrat-semibold text-uppercase bg-border-gray-color rounded-circle d-flex align-items-center justify-content-center shadow">
                                             <span className="font-20"> {campaignName?.slice(0, 2) || "CAM"}</span>
@@ -614,12 +616,50 @@ const CampaignNavbar = () => {
                                         }`}
                                 />
                             </NavLink>
-                            {isDashboardActive && <NavLink
-                                to="/dashboard-campaigns"
+                            {/* {isDashboardActive && <NavLink
+                                to="/campaignform"
                                 className={`nav-link text-blue-color bg-transparent border-blue mt-lg-0 mt-2 rounded-pill py-2 d-flex align-itmes-center justify-content-center font-14 montserrat-semibold me-3 px-5`}
                             >
-                                <span>My Campaigns</span>
-                            </NavLink>}
+                                <span>Edit Campaign</span>
+                            </NavLink>} */}
+
+                            {isDashboardActive && (
+  <NavLink
+    to="/campaignform"
+    onClick={async () => {
+      try {
+        const GetAdminUid = sessionStorage.getItem("Auth");
+        const getAuth = await postData("/admin/auths", {
+          admin_uid: GetAdminUid,
+        });
+
+        const payload = {
+          admin_uid: GetAdminUid,
+          mode: getAuth?.mode,
+          log_alt: getAuth?.log_alt,
+        };
+
+        // Fetch all campaign data (same as dashboard)
+        const response = await postData(`/admin/edit/${GetAdminUid}`, payload);
+
+        if (response?.program_details?.length > 0) {
+          // Store same way as Edit button
+          localStorage.setItem(
+            "editProgramData",
+            JSON.stringify(response.program_details[0]) // or whichever program you want to edit
+          );
+          setContextToEditForm(true);
+        }
+      } catch (error) {
+        console.error("Error fetching campaign data:", error);
+      }
+    }}
+    className={`nav-link text-blue-color bg-transparent border-blue mt-lg-0 mt-2 rounded-pill py-2 d-flex align-itmes-center justify-content-center font-14 montserrat-semibold me-3 px-5`}
+  >
+    <span>Edit Campaign</span>
+  </NavLink>
+)}
+
                             {/* <Nav.Link href="#deets" className="font-32 text-blue-color ms-3 text-border-gray-color pe-none">
                                 <GoBell />
                             </Nav.Link> */}
