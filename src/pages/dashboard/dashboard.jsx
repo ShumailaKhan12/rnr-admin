@@ -2449,7 +2449,7 @@ const Dashboard = () => {
                     <img src={card.img} alt={card.label} />
                   </div>
                   <p className="font-16 text-uppercase mb-0 pt-2 text-blue-color montserrat-semibold">
-                    {card.label}
+                    {card.label} 
                   </p>
                 </div>
               </div>
@@ -2670,7 +2670,7 @@ const Dashboard = () => {
           <div className="row py-5">
             <div className="col-lg-5">
               <p className="font-24 montserrat-medium text-blue-color">
-                Top 5 Referrers
+                Top 3 Referrers
               </p>
               {DashStatData?.top_referrers.length > 0 ? (
                 <>
@@ -2707,7 +2707,7 @@ const Dashboard = () => {
             </div>
             <div className="col-lg-7">
               <p className="font-24 montserrat-medium text-blue-color">
-                Top 5 Earners
+                Top 3 Earners
               </p>
 
               {DashStatData?.top_earners.length > 0 ? (

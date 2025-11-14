@@ -99,7 +99,7 @@ const AppRoutes = () => {
 
   // Protected route wrapper
   const PrivateRoute = ({ children }) => {
-    return AuthLocal ? children : <Navigate to="/login" replace />;
+    return AuthLocal ? children : <Navigate to="/" replace />;
   };
 
   return (
