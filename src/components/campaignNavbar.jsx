@@ -471,6 +471,8 @@ const CampaignNavbar = () => {
     const isDashboardActive = location.pathname === "/dashboard";
     const isCreateCampaignActive = location.pathname === "/campaignform";
 
+    const [loading, setLoading] = useState(false);
+
     const [passwords, setPasswords] = useState({
         newPassword: '',
         rePassword: '',
@@ -483,6 +485,7 @@ const CampaignNavbar = () => {
     // const HandleImgUpld =()=>{}
     const GetAdminUid = sessionStorage.getItem("Auth");
     const onSubmit = async (data) => {
+        setLoading(true);
         const file = data?.file[0];
         let image;
         if (file) {
@@ -514,10 +517,12 @@ const CampaignNavbar = () => {
             const response = await postData("/admin/edit-profile", payload);
             if (response?.success) {
                 toastSuccess(response?.message);
+                 await HandleDashBoardAPI();
             }
         } catch (error) {
             toastError(error?.message);
         }
+         setLoading(false);
     };
 
     // ------Logout Functionailty
@@ -548,21 +553,23 @@ const CampaignNavbar = () => {
                 const Decrpt = responseState;
                 setProfileData(Decrpt);
 
-                // ✅ Prefill form fields
+                // Prefill form fields
                 setValue("name", Decrpt?.admin_data?.username || "");
                 setValue("email", Decrpt?.admin_data?.email || "");
                 setValue("mobile", Decrpt?.admin_data?.mobile_number || "");
+                return Decrpt;
             }
         } catch (error) {
             console.log("error: ", error);
         }
     };
+    
 
     useEffect(() => {
         HandleDashBoardAPI();
     }, []);
 
-    
+
     return (
         <>
             <Navbar
@@ -604,8 +611,7 @@ const CampaignNavbar = () => {
                                         }`}
                                 />
                             </NavLink>}
-                            <NavLink to="/campaignform">
-                                {/* <Button btn_title={"Create Campaign"} icon={<GoPlus className="font-18" />} btn_class={"bg-transparent border-blue text-blue-color px-5"} onClick={() => setContextToEditForm(false)} /> */}
+                            {/* <NavLink to="/campaignform">
                                 <Button
                                     btn_title="Create Campaign"
                                     icon={<GoPlus className="font-18" />}
@@ -615,7 +621,7 @@ const CampaignNavbar = () => {
                                         : "bg-transparent border-blue text-blue-color"
                                         }`}
                                 />
-                            </NavLink>
+                            </NavLink> */}
                             {/* {isDashboardActive && <NavLink
                                 to="/campaignform"
                                 className={`nav-link text-blue-color bg-transparent border-blue mt-lg-0 mt-2 rounded-pill py-2 d-flex align-itmes-center justify-content-center font-14 montserrat-semibold me-3 px-5`}
@@ -624,41 +630,41 @@ const CampaignNavbar = () => {
                             </NavLink>} */}
 
                             {isDashboardActive && (
-  <NavLink
-    to="/campaignform"
-    onClick={async () => {
-      try {
-        const GetAdminUid = sessionStorage.getItem("Auth");
-        const getAuth = await postData("/admin/auths", {
-          admin_uid: GetAdminUid,
-        });
+                                <NavLink
+                                    to="/campaignform"
+                                    onClick={async () => {
+                                        try {
+                                            const GetAdminUid = sessionStorage.getItem("Auth");
+                                            const getAuth = await postData("/admin/auths", {
+                                                admin_uid: GetAdminUid,
+                                            });
 
-        const payload = {
-          admin_uid: GetAdminUid,
-          mode: getAuth?.mode,
-          log_alt: getAuth?.log_alt,
-        };
+                                            const payload = {
+                                                admin_uid: GetAdminUid,
+                                                mode: getAuth?.mode,
+                                                log_alt: getAuth?.log_alt,
+                                            };
 
-        // Fetch all campaign data (same as dashboard)
-        const response = await postData(`/admin/edit/${GetAdminUid}`, payload);
+                                            // Fetch all campaign data (same as dashboard)
+                                            const response = await postData(`/admin/edit/${GetAdminUid}`, payload);
 
-        if (response?.program_details?.length > 0) {
-          // Store same way as Edit button
-          localStorage.setItem(
-            "editProgramData",
-            JSON.stringify(response.program_details[0]) // or whichever program you want to edit
-          );
-          setContextToEditForm(true);
-        }
-      } catch (error) {
-        console.error("Error fetching campaign data:", error);
-      }
-    }}
-    className={`nav-link text-blue-color bg-transparent border-blue mt-lg-0 mt-2 rounded-pill py-2 d-flex align-itmes-center justify-content-center font-14 montserrat-semibold me-3 px-5`}
-  >
-    <span>Edit Campaign</span>
-  </NavLink>
-)}
+                                            if (response?.program_details?.length > 0) {
+                                                // Store same way as Edit button
+                                                localStorage.setItem(
+                                                    "editProgramData",
+                                                    JSON.stringify(response.program_details[0]) // or whichever program you want to edit
+                                                );
+                                                setContextToEditForm(true);
+                                            }
+                                        } catch (error) {
+                                            console.error("Error fetching campaign data:", error);
+                                        }
+                                    }}
+                                    className={`nav-link text-blue-color bg-transparent border-blue mt-lg-0 mt-2 rounded-pill py-2 d-flex align-itmes-center justify-content-center font-14 montserrat-semibold me-3 px-5`}
+                                >
+                                    <span>Edit Campaign</span>
+                                </NavLink>
+                            )}
 
                             {/* <Nav.Link href="#deets" className="font-32 text-blue-color ms-3 text-border-gray-color pe-none">
                                 <GoBell />
@@ -795,15 +801,21 @@ const CampaignNavbar = () => {
                                 Mobile Number
                             </label>
                             <input
-                                type="number"
+                                type="tel"
                                 className="form-control login-input font-14 montserrat-medium text-blue-color border-0"
                                 placeholder="Enter Mobile No."
-                                {...register("mobile"
-                                    //   , {
-                                    //   required: "Mobile number is required",
-                                    // }
-                                )}
+                                {...register("mobile", {
+                                    required: "Mobile number is required",
+                                    validate: {
+                                        onlyDigits: v => /^\d+$/.test(v) || "Only digits allowed",
+                                        tenDigits: v => v.length === 10 || "Must be exactly 10 digits",
+                                    },
+                                })}
+                                onInput={(e) => {
+                                    e.target.value = e.target.value.replace(/\D/g, "").slice(0, 10);
+                                }}
                             />
+
                             {/* {errors.mobile && (
                 <small className="text-danger">{errors.mobile.message}</small>
               )} */}
@@ -922,8 +934,9 @@ const CampaignNavbar = () => {
                             </label>
                         </div>
                         <Button
-                            btn_class={"text-white px-5 bg-blue-color w-100 border-0"}
-                            btn_title={"Save Changes"}
+                            btn_class={`text-white px-5 bg-blue-color w-100 border-0 ${loading ? "opacity-50" : ""}`}
+                            btn_title={loading ? "Saving..." : "Save Changes"}
+                            disabled={loading}
                         />
                         {/* <button type='submit' className="rounded-pill font-14 montserrat-medium border-0 text-white bg-blue-color px-3 w-100 py-2">Save Changes</button> */}
                     </form>
