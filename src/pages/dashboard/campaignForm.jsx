@@ -1640,20 +1640,20 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
-                            min="0"
+                            min="1"
                             onKeyDown={(e) => {
                               if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
                             }}
                             onInput={(e) => {
-                              if (e.target.value < 0) e.target.value = 0;
+                              if (e.target.value < 1) e.target.value = 1;
                             }}
 
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("joining_bonus", {
                               required: "Joining bonus is required",
-                              min: { value: 0, message: "Value cannot be negative" },
+                              min: { value: 1, message: "Value cannot be negative" },
                               setValueAs: (value) =>
-                                value ? Number(value) : 0, // Convert value to number
+                                value ? Number(value) : 1, // Convert value to number
                             })}
                           />
                           {errors.joining_bonus && (
@@ -1670,20 +1670,20 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
-                            min="0"
+                            min="1"
                             onKeyDown={(e) => {
                               if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
                             }}
                             onInput={(e) => {
-                              if (e.target.value < 0) e.target.value = 0;
+                              if (e.target.value < 1) e.target.value = 1;
                             }}
 
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("meteors_referral", {
                               required: "Meteors referral is required",
-                              min: { value: 0, message: "Value cannot be negative" },
+                              min: { value: 1, message: "Value cannot be negative" },
                               setValueAs: (value) =>
-                                value ? Number(value) : 0, // Convert value to number
+                                value ? Number(value) : 1, // Convert value to number
                             })}
                           />
                           {errors.mete && (
@@ -1700,18 +1700,18 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
-                            min="0"
+                            min="1"
                             onKeyDown={(e) => {
                               if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
                             }}
                             onInput={(e) => {
-                              if (e.target.value < 0) e.target.value = 0;
+                              if (e.target.value < 1) e.target.value = 1;
                             }}
 
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("stars_joining", {
                               required: "Stars joining is required",
-                              min: { value: 0, message: "Value cannot be negative" },
+                              min: { value: 1, message: "Value cannot be negative" },
                               setValueAs: (value) =>
                                 value ? Number(value) : 0, // Convert value to number
                             })}
@@ -1730,20 +1730,20 @@ const CampaignForm = () => {
                           <input
                             type="number"
                             placeholder="Enter Value"
-                            min="0"
+                            min="1"
                             onKeyDown={(e) => {
                               if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
                             }}
                             onInput={(e) => {
-                              if (e.target.value < 0) e.target.value = 0;
+                              if (e.target.value < 1) e.target.value = 1;
                             }}
 
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2"
                             {...register("link_validity", {
                               required: "",
-                              min: { value: 0, message: "Value cannot be negative" },
+                              min: { value: 1, message: "Value cannot be negative" },
                               setValueAs: (value) =>
-                                value ? Number(value) : 0, // Convert value to number
+                                value ? Number(value) : 1, // Convert value to number
                             })}
                           />
                           {errors.link_validity && (
@@ -1774,12 +1774,12 @@ const CampaignForm = () => {
                               className="form-control login-input border-radiu-8 font-14 py-2 border-0"
                               placeholder="For every X Meteor"
                               type="number"
-                              min="0"
+                              min="1"
                               onKeyDown={(e) => {
                                 if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
                               }}
                               onInput={(e) => {
-                                if (e.target.value < 0) e.target.value = 0;
+                                if (e.target.value < 1) e.target.value = 1;
                               }}
 
                               name=""
@@ -1802,12 +1802,12 @@ const CampaignForm = () => {
                               className="form-control login-input border-radiu-8 font-14 py-2 border-0"
                               placeholder="Rupees Rate"
                               type="number"
-                              min="0"
+                              min="1"
                               onKeyDown={(e) => {
                                 if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
                               }}
                               onInput={(e) => {
-                                if (e.target.value < 0) e.target.value = 0;
+                                if (e.target.value < 1) e.target.value = 1;
                               }}
 
                               name=""
@@ -1815,7 +1815,7 @@ const CampaignForm = () => {
                               {...register("y_star", {
                                 required: "Rupees Rate is required",
                                 setValueAs: (value) =>
-                                  value ? Number(value) : 0, // Convert value to number
+                                  value ? Number(value) : 0, 
                               })}
                             />
                             {errors.y_star && (
