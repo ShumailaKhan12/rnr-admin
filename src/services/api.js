@@ -3,7 +3,7 @@ import axios from 'axios';
 // 🔧 Base URL setup
 // const ApiURL = 'https://77bd06fc9527.ngrok-free.app'; // Replace with your actual API base URL
 // const ApiURL = 'https://269479db5721.ngrok-free.app'; // Replace with your actual API base URL
-const ApiURL = 'https://45eb634ceab1.ngrok-free.app'
+const ApiURL = 'https://17b3413b05ed.ngrok-free.app'
 
 // 🌐 Axios instance
 const api = axios.create({

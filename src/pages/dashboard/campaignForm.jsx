@@ -136,28 +136,33 @@ const CampaignForm = () => {
 
 
   // Confirm delete
-  const confirmDeleteGalaxy = () => {
-    const galaxies = watch("galaxies") || [];
-    // const updated = galaxies;
-    // console.log(updated,"updated")
 
-    if (galaxies.length === 1) {
-     toastError("At least one galaxy is required.");
-      setShowDeleteModal(false);
-      return;
-    }
+const confirmDeleteGalaxy = () => {
+  const galaxies = watch("galaxies") || [];
 
-    galaxies.splice(deleteIndex, 1);
-
-    setValue("galaxies", updated, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-
-    toastSuccess("Galaxy deleted successfully");
+  // Minimum one galaxy must remain
+  if (galaxies.length === 1) {
+    toastError("At least one galaxy is required.");
     setShowDeleteModal(false);
-  };
+    return;
+  }
+
+  // Create updated array (do NOT mutate)
+  const updated = galaxies.filter((_, i) => i !== deleteIndex);
+
+  // Update in React Hook Form
+  setValue("galaxies", updated, {
+    shouldValidate: true,
+    shouldDirty: true,
+    shouldTouch: true,
+  });
+
+  // Also update NoGalaxy so UI re-renders correctly
+  SetNoGalaxy((prev) => prev - 1);
+
+  toastSuccess("Galaxy deleted successfully");
+  setShowDeleteModal(false);
+};
 
 
   const isFirstGalaxyValid =
