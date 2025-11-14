@@ -431,7 +431,7 @@ const NavBar = () => {
     sessionStorage.removeItem('Auth');
     setAuthLocal('');
     console.log('check auth');
-    navigate('/login');
+    navigate('/');
   };
 
   // Dashboard APi for showing prfile data

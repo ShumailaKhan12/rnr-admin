@@ -530,7 +530,7 @@ const CampaignNavbar = () => {
         sessionStorage.removeItem('Auth');
         setAuthLocal('');
         console.log('check auth');
-        navigate('/login');
+        navigate('/');
     };
 
     // Dashboard APi for showing prfile data
@@ -697,7 +697,7 @@ const CampaignNavbar = () => {
                                             <img
                                                 src={profileData?.admin_data?.profile_picture || User}
                                                 alt="avatar"
-                                                className="rounded-circle"
+                                                className="rounded-circle user-icon"
                                                 width="40"
                                             />
                                             <button
