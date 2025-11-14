@@ -35,6 +35,7 @@ import Planet1 from "../../assets/images/campForm/HIW-planet-1.svg";
 import Planet2 from "../../assets/images/campForm/HIW-planet-2.svg";
 import Planet3 from "../../assets/images/campForm/HIW-planet-3.svg";
 import Rocketgif from "../../assets/images/campForm/racketgif.gif";
+import ConfirmDeleteModal from "../../components/modal";
 
 const tabs = [
   { key: "tab1", label: "Basic Info" },
@@ -93,6 +94,10 @@ const CampaignForm = () => {
     "Twitter",
   ]);
 
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
+
+
   // =========================
   // Show Values In Preview
   // =========================
@@ -121,12 +126,45 @@ const CampaignForm = () => {
   // };
 
   const galaxies = watch("galaxies") || [];
+  console.log(galaxies,"galaxies")
+
+    // Open modal
+  const deleteGalaxy = (index) => {
+    setDeleteIndex(index);
+    setShowDeleteModal(true);
+  };
+
+
+  // Confirm delete
+  const confirmDeleteGalaxy = () => {
+    const galaxies = watch("galaxies") || [];
+    // const updated = galaxies;
+    // console.log(updated,"updated")
+
+    if (galaxies.length === 1) {
+     toastError("At least one galaxy is required.");
+      setShowDeleteModal(false);
+      return;
+    }
+
+    galaxies.splice(deleteIndex, 1);
+
+    setValue("galaxies", updated, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+
+    toastSuccess("Galaxy deleted successfully");
+    setShowDeleteModal(false);
+  };
+
+
   const isFirstGalaxyValid =
     galaxies.length > 0 &&
     galaxies[0]?.galaxy_name?.trim() &&
     galaxies[0]?.total_milestones &&
     Number(galaxies[0]?.total_milestones) > 0;
-
 
   const goToNextTab = async () => {
     const currentIndex = tabs.findIndex((tab) => tab.key === activeTab);
@@ -136,8 +174,21 @@ const CampaignForm = () => {
     const tabFields = {
       tab1: ["program_name"],
       tab2: ["galaxies"],
-      tab3: ["invite_link", "start_date", "end_date", "referrer_reward_type", "referrer_reward_value"],
-      tab4: ["joining_bonus", "meteors_referral", "stars_joining", "link_validity", "meteor", "y_star"],
+      tab3: [
+        "invite_link",
+        "start_date",
+        "end_date",
+        "referrer_reward_type",
+        "referrer_reward_value",
+      ],
+      tab4: [
+        "joining_bonus",
+        "meteors_referral",
+        "stars_joining",
+        "link_validity",
+        "meteor",
+        "y_star",
+      ],
     };
 
     if (!ContextToEditForm) {
@@ -158,7 +209,6 @@ const CampaignForm = () => {
       setActiveTab(nextTab.key);
     }
   };
-
 
   // Upload Logo function
   const handleCampLogoUpload = (e) => {
@@ -256,7 +306,6 @@ const CampaignForm = () => {
     }
   };
 
-
   const handlePrimarySelect = (platform) => {
     setPrimarySelected(platform);
     setPrimaryShare(platform); // update primaryShare icon
@@ -289,14 +338,15 @@ const CampaignForm = () => {
         program_name: data?.program_name || "",
       };
 
-      if (ContextToEditForm && ContextCampEditDataAPI?.campaign_info?.program_id) {
+      if (
+        ContextToEditForm &&
+        ContextCampEditDataAPI?.campaign_info?.program_id
+      ) {
         payload.program_id = ContextCampEditDataAPI.campaign_info.program_id;
       }
 
-
       const apiUrl = `/admin/add-rewards/${GetAdminUid}`;
       const response = await postData(apiUrl, payload);
-
 
       // if (ContextToEditForm) {
       //   const program_id = ContextCampEditDataAPI?.campaign_info?.program_id;
@@ -334,7 +384,6 @@ const CampaignForm = () => {
     // }
   };
 
-
   useEffect(() => {
     if (!ContextToEditForm) {
       reset({
@@ -351,7 +400,6 @@ const CampaignForm = () => {
     }
   }, [ContextToEditForm, reset]);
 
-
   const handleUrlBlur = (e) => {
     try {
       const inputUrl = new URL(e.target.value);
@@ -367,8 +415,6 @@ const CampaignForm = () => {
   const handleAddFAQ = () => {
     setFaqList([...faqList, { question: "", answer: "" }]);
   };
-
-
 
   useEffect(() => {
     const stored = localStorage.getItem("editProgramData");
@@ -405,16 +451,11 @@ const CampaignForm = () => {
       });
       setGalaxyData(galaxies);
 
-
       SetNoGalaxy(galaxies.length);
     }
-
-
   }, [reset]);
 
-const [activeGalaxy, setActiveGalaxy] = useState(0);
-
-
+  const [activeGalaxy, setActiveGalaxy] = useState(0);
 
   const validateAllGalaxies = () => {
     const galaxies = watch("galaxies") || [];
@@ -442,23 +483,49 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
         const m = msList[mIndex];
 
         if (!m?.milestone_name?.trim()) {
-          toastError(`Please fill Milestone Name in Galaxy ${gIndex + 1}, Milestone ${mIndex + 1}`);
+          toastError(
+            `Please fill Milestone Name in Galaxy ${gIndex + 1}, Milestone ${
+              mIndex + 1
+            }`
+          );
           return false;
         }
         if (!m?.display_message?.trim()) {
-          toastError(`Please fill Display Message in Galaxy ${gIndex + 1}, Milestone ${mIndex + 1}`);
+          toastError(
+            `Please fill Display Message in Galaxy ${gIndex + 1}, Milestone ${
+              mIndex + 1
+            }`
+          );
           return false;
         }
-        if (m?.referrals_required_to_unlock === "" || m?.referrals_required_to_unlock === undefined) {
-          toastError(`Please fill Referrals Required in Galaxy ${gIndex + 1}, Milestone ${mIndex + 1}`);
+        if (
+          m?.referrals_required_to_unlock === "" ||
+          m?.referrals_required_to_unlock === undefined
+        ) {
+          toastError(
+            `Please fill Referrals Required in Galaxy ${
+              gIndex + 1
+            }, Milestone ${mIndex + 1}`
+          );
           return false;
         }
-        if (m?.meteors_required_to_unlock === "" || m?.meteors_required_to_unlock === undefined) {
-          toastError(`Please fill Meteors Required in Galaxy ${gIndex + 1}, Milestone ${mIndex + 1}`);
+        if (
+          m?.meteors_required_to_unlock === "" ||
+          m?.meteors_required_to_unlock === undefined
+        ) {
+          toastError(
+            `Please fill Meteors Required in Galaxy ${gIndex + 1}, Milestone ${
+              mIndex + 1
+            }`
+          );
           return false;
         }
         if (!m?.milestone_description?.trim()) {
-          toastError(`Please fill Description in Galaxy ${gIndex + 1}, Milestone ${mIndex + 1}`);
+          toastError(
+            `Please fill Description in Galaxy ${gIndex + 1}, Milestone ${
+              mIndex + 1
+            }`
+          );
           return false;
         }
       }
@@ -466,21 +533,7 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
 
     return true;
   };
-  // assume you already have: const { register, watch, setValue } = useForm();
-  const deleteGalaxy = (index) => {
-    if (!window.confirm("Are you sure you want to delete this Galaxy?")) return;
-
-    const galaxies = watch("galaxies") || [];
-    const newGalaxies = [...galaxies];
-    newGalaxies.splice(index, 1);
-
-    // update RHF state
-    setValue("galaxies", newGalaxies, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
-
-    // sync your UI count (NoGalaxy) but keep at least 1 to avoid zero-length render (adjust if you want 0 allowed)
-    SetNoGalaxy((prev) => Math.max(1, prev - 1));
-  };
-
+  
 
 
   // Set Edit Form Data
@@ -680,7 +733,6 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
     }
   };
 
-
   return (
     <>
       <div className="min-vh-100 bg-light-white-3-color">
@@ -699,7 +751,9 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
           onChange={(e) => e.target.type === "submit" && e.preventDefault()}
         >
           <div className="campaign-tab-bg d-flex justify-content-between align-items-center">
@@ -719,8 +773,9 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                     <Nav.Item key={tab.key}>
                       <Nav.Link
                         eventKey={tab.key}
-                        className={`font-16 montserrat-semibold text-border-gray-color ${!enabledTabs.includes(tab.key) ? "disabled-tab" : ""
-                          }`}
+                        className={`font-16 montserrat-semibold text-border-gray-color ${
+                          !enabledTabs.includes(tab.key) ? "disabled-tab" : ""
+                        }`}
                         disabled={!enabledTabs.includes(tab.key)}
                       >
                         {tab.label}{" "}
@@ -743,9 +798,10 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                     <Nav.Item key={tab.key}>
                       <Nav.Link
                         eventKey={tab.key}
-                        className={`font-16 montserrat-semibold text-blue-color ${enabledTabs.includes(tab.key) ? "disabled-tab" : ""
-                          }`}
-                      // disabled={!enabledTabs.includes(tab.key)}
+                        className={`font-16 montserrat-semibold text-blue-color ${
+                          enabledTabs.includes(tab.key) ? "disabled-tab" : ""
+                        }`}
+                        // disabled={!enabledTabs.includes(tab.key)}
                       >
                         {tab.label}{" "}
                         <IoIosArrowForward className="mx-1 font-20" />
@@ -756,7 +812,6 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
               )}
             </div>
             {ContextToEditForm ? (
-
               <>
                 {activeTab === "tab4" ? (
                   <button
@@ -780,7 +835,6 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                 )}
               </>
             ) : (
-
               <>
                 {activeTab === "tab4" ? (
                   <button
@@ -826,7 +880,9 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                         placeholder="Enter campaign name"
                       />
                       {errors.program_name && (
-                        <p className="text-danger">{errors.program_name.message}</p>
+                        <p className="text-danger">
+                          {errors.program_name.message}
+                        </p>
                       )}
                     </div>
 
@@ -893,55 +949,55 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
               </>
             )}
 
-
             {/* Tab2 content Start here */}
             {activeTab === "tab2" && (
               <>
-
                 {Array.from({ length: Number(NoGalaxy) || 1 })?.map(
                   (_, galaxyIndex) => (
-                    <div key={galaxyIndex} className="row py-4 ">
+                    <div
+                      key={`galaxy-${galaxyIndex}-${watch(
+                        `galaxies.${galaxyIndex}.galaxy_name`
+                      )}`}
+                      className="row py-4"
+                    >
                       <div className="col-lg-6">
-
                         <div className="bg-white border-radius-12 box-shadow p-4 position-relative">
-                          {/* <div className="col-lg-12"> */}
+                          <div className="row">
+                            <div className="d-flex align-items-center justify-content-between">
+                              <div>
+                                <h5 className="font-18 montserrat-semibold text-gray-color mb-0">
+                                  Edit Galaxy {galaxyIndex + 1}
+                                </h5>
+                              </div>
 
-                          <div
-                            // onSubmit={handleSubmitAddGalaxy(onAddGalaxySubmit)}
-                            className="row"
-                          >
-                            <button
-                              type="button"
-                              onClick={() => deleteGalaxy(galaxyIndex)}
-                              className="btn border-0 p-1 position-absolute "
-                              style={{
-                                background: "transparent",
-                                top: "10px",
-                                right: "0px",
-                                transform: "translate(48%, -60%)",
-                                zIndex: 20,
-                              }}
-                            >
-                              <RxCross2 size={22} color="gray" />
-                            </button>
+                              <div>
+                                <button
+                                  type="button"
+                                  onClick={() => deleteGalaxy(galaxyIndex)}
+                                  className="btn border-0 p-1"
+                                  style={{
+                                    background: "transparent",
+                                    zIndex: 20,
+                                  }}
+                                >
+                                  <RxCross2 size={22} color="gray" />
+                                </button>
+                              </div>
+                            </div>
 
-
-                            <h5 className=" font-18 montserrat-semibold text-gray-color mb-0">
-                              Edit Galaxy  {galaxyIndex + 1}
-                            </h5>
                             <p className="text-blue-color font-12 montserrat-medium">
                               This is the first level of the reward and referral
                               program
                             </p>
 
                             {/* Galaxy Title */}
-                            <div className="col-lg-12 mb-3 ">
+                            <div className="col-lg-12 mb-3">
                               <label className="form-label font-14 montserrat-regular text-border-gray-color">
                                 Galaxy Name
                               </label>
                               <input
                                 type="text"
-                                className="form-control login-input rounded-3 border-0 py-2 text-blue-color montserrat-medium "
+                                className="form-control login-input rounded-3 border-0 py-2 text-blue-color montserrat-medium"
                                 {...register(
                                   `galaxies.${galaxyIndex}.galaxy_name`,
                                   {
@@ -961,7 +1017,8 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                                 placeholder="Y Stars"
                                 min="0"
                                 onKeyDown={(e) => {
-                                  if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                  if (["-", "e", "E", "+"].includes(e.key))
+                                    e.preventDefault();
                                 }}
                                 onInput={(e) => {
                                   if (e.target.value < 0) e.target.value = 0;
@@ -984,9 +1041,8 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                                 defaultValue=""
                               >
                                 <option value="">Choose the numbers</option>
-
                                 {[...Array(8)].map((_, i) => {
-                                  const value = i + 3; // 3 to 10
+                                  const value = i + 3;
                                   return (
                                     <option key={value} value={value}>
                                       {value}
@@ -996,13 +1052,12 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                               </select>
                             </div>
                           </div>
-                          {/* </div> */}
                         </div>
                       </div>
 
+                      {/* Right side Milestones */}
                       <div className="col-lg-6 new-milestone-form">
                         <div className="bg-white border-radius-12 border-light-gray p-4 milestone-form-sect">
-                          {/* MileStone Form */}
                           {Array.from({
                             length: Number(
                               watch(
@@ -1015,79 +1070,58 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                               className="milestone-form row"
                             >
                               <hr
-                                className={`${milestoneIndex == 0 ? "d-none" : ""
-                                  }`}
+                                className={`${
+                                  milestoneIndex === 0 ? "d-none" : ""
+                                }`}
                               />
                               <p className="font-18 montserrat-semibold text-border-gray-color mb-0">
                                 Milestone {milestoneIndex + 1}
                               </p>
                               <p className="text-blue-color font-12 montserrat-medium">
                                 This is the first milestone/ Level of the reward
-                                and referral program
+                                program
                               </p>
 
-                              {/* Milestone Title */}
+                              {/* Milestone Name */}
                               <div className="col-lg-12 mb-3">
-                                <label
-                                  htmlFor="milestoneTitle"
-                                  className="form-label font-14 montserrat-regular text-border-gray-color"
-                                >
+                                <label className="form-label font-14 montserrat-regular text-border-gray-color">
                                   Milestone Name
                                 </label>
                                 <input
-                                  id="milestoneTitle"
                                   {...register(
                                     `galaxies.${galaxyIndex}.milestones.${milestoneIndex}.milestone_name`,
-                                    {
-                                      required: "Milestone Name is required",
-                                    }
+                                    { required: "Milestone Name is required" }
                                   )}
                                   type="text"
                                   className="form-control login-input border-0"
                                 />
-                                {/* {errors.milestoneTitle && (
-                                                                      <p className="text-danger">
-                                                                          {errors.milestoneTitle.message}
-                                                                      </p>
-                                                                      )} */}
                               </div>
 
                               {/* Display Message */}
                               <div className="col-lg-12 mb-3">
-                                <label
-                                  htmlFor="displaymessage"
-                                  className="form-label font-14 montserrat-regular text-border-gray-color"
-                                >
+                                <label className="form-label font-14 montserrat-regular text-border-gray-color">
                                   Display Message
                                 </label>
                                 <input
-                                  id="displaymessage"
                                   {...register(
                                     `galaxies.${galaxyIndex}.milestones.${milestoneIndex}.display_message`,
-                                    {
-                                      required: "Display Message is required",
-                                    }
+                                    { required: "Display Message is required" }
                                   )}
                                   type="text"
                                   className="form-control login-input border-0"
                                 />
                               </div>
 
-                              {/* Icon Url */}
-
-                              {/* Milestone Reward */}
+                              {/* Referrals Required */}
                               <div className="col-lg-6 mb-3">
-                                <label
-                                  htmlFor="referrals_required_to_unlock"
-                                  className="form-label font-14 montserrat-regular text-border-gray-color"
-                                >
+                                <label className="form-label font-14 montserrat-regular text-border-gray-color">
                                   Referrals required to unlock
                                 </label>
                                 <input
-                                  id="referrals_required_to_unlock"
                                   min="0"
                                   onKeyDown={(e) => {
-                                    if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                    if (["-", "e", "E", "+"].includes(e.key))
+                                      e.preventDefault();
                                   }}
                                   onInput={(e) => {
                                     if (e.target.value < 0) e.target.value = 0;
@@ -1095,8 +1129,7 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                                   {...register(
                                     `galaxies.${galaxyIndex}.milestones.${milestoneIndex}.referrals_required_to_unlock`,
                                     {
-                                      required:
-                                        "Referral required to unlock is required",
+                                      required: "Referral required is required",
                                       setValueAs: (value) =>
                                         value ? Number(value) : 0,
                                     }
@@ -1104,26 +1137,18 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                                   type="number"
                                   className="form-control login-input border-0 no-arrows"
                                 />
-                                {/* {errors.milestoneReward && (
-                                                                      <p className="text-danger">
-                                                                          {errors.milestoneReward.message}
-                                                                      </p>
-                                                                )} */}
                               </div>
 
-                              {/* Meteors required to unlock */}
+                              {/* Meteors Required */}
                               <div className="col-lg-6 mb-3">
-                                <label
-                                  htmlFor="meteorsRequired"
-                                  className="form-label font-14 montserrat-regular text-border-gray-color"
-                                >
+                                <label className="form-label font-14 montserrat-regular text-border-gray-color">
                                   Meteors required to unlock
                                 </label>
                                 <input
-                                  id="meteorsRequired"
                                   min="0"
                                   onKeyDown={(e) => {
-                                    if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                    if (["-", "e", "E", "+"].includes(e.key))
+                                      e.preventDefault();
                                   }}
                                   onInput={(e) => {
                                     if (e.target.value < 0) e.target.value = 0;
@@ -1132,75 +1157,64 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                                     `galaxies.${galaxyIndex}.milestones.${milestoneIndex}.meteors_required_to_unlock`,
                                     {
                                       required: "Meteors required is required",
-
                                       setValueAs: (value) =>
-                                        value ? Number(value) : 0, // Convert value to number
+                                        value ? Number(value) : 0,
                                     }
                                   )}
                                   type="number"
                                   className="form-control login-input border-0 no-arrows"
                                 />
-                                {/* {errors.meteorsRequired && (
-                                                                                <p className="text-danger">
-                                                                      {errors.meteorsRequired.message}
-                                                                              </p>
-                                                                      )} */}
                               </div>
 
-                              {/* Milestone Description */}
+                              {/* Description */}
                               <div className="col-lg-12 mb-3">
-                                <label
-                                  htmlFor="milestoneDescription"
-                                  className="form-label font-14 montserrat-regular text-border-gray-color"
-                                >
+                                <label className="form-label font-14 montserrat-regular text-border-gray-color">
                                   Milestone Description
                                 </label>
                                 <textarea
-                                  id="milestoneDescription"
                                   {...register(
                                     `galaxies.${galaxyIndex}.milestones.${milestoneIndex}.milestone_description`
                                   )}
-                                  className="form-control login-input border-0"
                                   rows={3}
+                                  className="form-control login-input border-0"
                                 ></textarea>
                               </div>
                             </div>
                           ))}
                         </div>
-
                       </div>
-
                     </div>
                   )
                 )}
-                <div  className="mb-10 d-flex ">
+
+                {/* Add new Galaxy */}
+                <div className="mb-10 d-flex">
                   <Button
                     type="button"
                     onClick={() => {
                       if (!validateAllGalaxies()) return;
-
                       SetNoGalaxy((prev) => prev + 1);
                     }}
-                    btn_class={`border-purple bg-transparent px-4 w-25 ${isFirstGalaxyValid ? "text-purple-color" : "text-gray-color opacity-50 cursor-not-allowed"
-                      }`}
+                    btn_class={`border-purple bg-transparent px-4 w-25 ${
+                      isFirstGalaxyValid
+                        ? "text-purple-color"
+                        : "text-gray-color opacity-50 cursor-not-allowed"
+                    }`}
                     btn_title="Create New"
                     disabled={!isFirstGalaxyValid}
                   />
-
-                   {/* <button
-  type="button"
-  onClick={() => deleteGalaxy(activeGalaxy)}
-  className="btn btn-outline-danger d-flex align-items-center gap-1"
->
-  <RxCross2 size={18} />
-  Delete Galaxy
-</button> */}
-  
                 </div>
-
-
               </>
             )}
+
+            {/* Delete Modal */}
+      <ConfirmDeleteModal
+        show={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={confirmDeleteGalaxy}
+        title="Delete Galaxy"
+        message="Are you sure you want to delete this Galaxy?"
+      />
 
             {/* Tab3 content Start here */}
             {activeTab === "tab3" && (
@@ -1748,16 +1762,19 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                             placeholder="Enter Value"
                             min="1"
                             onKeyDown={(e) => {
-                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                              if (["-", "e", "E", "+"].includes(e.key))
+                                e.preventDefault();
                             }}
                             onInput={(e) => {
                               if (e.target.value < 1) e.target.value = 1;
                             }}
-
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2 no-arrows"
                             {...register("joining_bonus", {
                               required: "Joining bonus is required",
-                              min: { value: 1, message: "Value cannot be negative" },
+                              min: {
+                                value: 1,
+                                message: "Value cannot be negative",
+                              },
                               setValueAs: (value) =>
                                 value ? Number(value) : 1, // Convert value to number
                             })}
@@ -1778,16 +1795,19 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                             placeholder="Enter Value"
                             min="1"
                             onKeyDown={(e) => {
-                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                              if (["-", "e", "E", "+"].includes(e.key))
+                                e.preventDefault();
                             }}
                             onInput={(e) => {
                               if (e.target.value < 1) e.target.value = 1;
                             }}
-
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2 no-arrows"
                             {...register("meteors_referral", {
                               required: "Meteors referral is required",
-                              min: { value: 1, message: "Value cannot be negative" },
+                              min: {
+                                value: 1,
+                                message: "Value cannot be negative",
+                              },
                               setValueAs: (value) =>
                                 value ? Number(value) : 1, // Convert value to number
                             })}
@@ -1808,16 +1828,19 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                             placeholder="Enter Value"
                             min="1"
                             onKeyDown={(e) => {
-                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                              if (["-", "e", "E", "+"].includes(e.key))
+                                e.preventDefault();
                             }}
                             onInput={(e) => {
                               if (e.target.value < 1) e.target.value = 1;
                             }}
-
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2 no-arrows"
                             {...register("stars_joining", {
                               required: "Stars joining is required",
-                              min: { value: 1, message: "Value cannot be negative" },
+                              min: {
+                                value: 1,
+                                message: "Value cannot be negative",
+                              },
                               setValueAs: (value) =>
                                 value ? Number(value) : 0, // Convert value to number
                             })}
@@ -1838,16 +1861,19 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                             placeholder="Enter Value"
                             min="1"
                             onKeyDown={(e) => {
-                              if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                              if (["-", "e", "E", "+"].includes(e.key))
+                                e.preventDefault();
                             }}
                             onInput={(e) => {
                               if (e.target.value < 1) e.target.value = 1;
                             }}
-
                             className="form-control login-input text-blue-color rounded-3 border-0 py-2 no-arrows"
                             {...register("link_validity", {
                               required: "",
-                              min: { value: 1, message: "Value cannot be negative" },
+                              min: {
+                                value: 1,
+                                message: "Value cannot be negative",
+                              },
                               setValueAs: (value) =>
                                 value ? Number(value) : 1, // Convert value to number
                             })}
@@ -1882,12 +1908,12 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                               type="number"
                               min="1"
                               onKeyDown={(e) => {
-                                if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                if (["-", "e", "E", "+"].includes(e.key))
+                                  e.preventDefault();
                               }}
                               onInput={(e) => {
                                 if (e.target.value < 1) e.target.value = 1;
                               }}
-
                               name=""
                               id=""
                               {...register("meteor", {
@@ -1910,12 +1936,12 @@ const [activeGalaxy, setActiveGalaxy] = useState(0);
                               type="number"
                               min="1"
                               onKeyDown={(e) => {
-                                if (["-", "e", "E", "+"].includes(e.key)) e.preventDefault();
+                                if (["-", "e", "E", "+"].includes(e.key))
+                                  e.preventDefault();
                               }}
                               onInput={(e) => {
                                 if (e.target.value < 1) e.target.value = 1;
                               }}
-
                               name=""
                               id=""
                               {...register("y_star", {

@@ -110,14 +110,7 @@ const AppRoutes = () => {
         <Route path="/forgot" element={<Forgot />} />
 
         {/* Protected Routes */}
-        {/* <Route
-          path="/dashboard-campaigns"
-          element={
-            <PrivateRoute>
-              <Dashboarcampaigns />
-            </PrivateRoute>
-          }
-        /> */}
+        
         <Route
           path="/dashboard"
           element={
