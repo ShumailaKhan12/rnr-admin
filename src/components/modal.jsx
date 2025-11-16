@@ -9,10 +9,14 @@ const ConfirmDeleteModal = ({ show, onClose, onConfirm, title, message }) => {
       <div className="modal fade show " style={{ display: "block" }}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content bg-gradient-color dlt-modal border-0 ">
-
             <div className="modal-header border-0">
-              <h5 className="modal-title montserrat-semibold font-24 text-primary-color">{title || "Confirm Delete"}</h5>
-              <button className="btn-close close-btn" onClick={onClose}></button>
+              <h5 className="modal-title montserrat-semibold font-24 text-primary-color">
+                {title || "Confirm Delete"}
+              </h5>
+              <button
+                className="btn-close close-btn"
+                onClick={onClose}
+              ></button>
             </div>
 
             <div className="modal-body text-center font-18 ">
@@ -27,7 +31,6 @@ const ConfirmDeleteModal = ({ show, onClose, onConfirm, title, message }) => {
                 Delete
               </button>
             </div>
-
           </div>
         </div>
       </div>

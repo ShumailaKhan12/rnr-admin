@@ -1,69 +1,3 @@
-// import React, { useContext, useEffect, useState } from "react";
-// import {
-//   BrowserRouter as Router,
-//   Routes,
-//   Route,
-//   Navigate,
-// } from "react-router-dom";
-// import Dashboarcampaigns from "../../pages/dashboard/campaignDashboard";
-// import Dashboard from "../../pages/dashboard/dashboard";
-// import ReferralsRewards from "../../pages/referralsRewards/referralsRewards";
-// import EarningRedemption from "../../pages/earningRedemptions/earningRedemption";
-// import Login from "../../pages/auth/Login";
-// import Forgot from "../../pages/auth/Forgot";
-// import PushupNotification from "../../pages/pushupNotification/pushupNotification";
-// import { UserContext } from "../../utils/UseContext/useContext";
-// import Error from "../../pages/Errror/error";
-// import MainForm from "../../pages/dashboard/mainForm";
-// import SpecialOfferForm from "../../pages/specialOffer/specialOfferForm";
-// import CampaignForm from "../../pages/dashboard/campaignForm";
-// import Product from "../../pages/product/product";
-
-// const AppRoutes = () => {
-//   // Check Auth Functionality
-//   const { AuthLocal, setAuthLocal } = useContext(UserContext);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const getValue = sessionStorage.getItem("Auth");
-//     setAuthLocal(getValue);
-//     setLoading(false);
-//   }, []);
-
-//   if (loading) return null;
-
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="*" element={<Error />} />
-//         <Route path="/" element={<Dashboarcampaigns />} />
-//         <Route path="/dashboard" element={<Dashboard />} />
-//         <Route path="/login" element={<Login />} />
-//         <Route path="/forgot" element={<Forgot />} />
-//         <Route path="/campaignform" element={<CampaignForm />} />
-//       </Routes>
-//     </Router>
-//   );
-// };
-
-// export default AppRoutes;
-
-{
-  /* <Route path="/earning" element={<EarningRedemption />} /> */
-}
-{
-  /* <Route path="/pushup" element={<PushupNotification />} /> */
-}
-
-// <Route path="/referral" element={<ReferralsRewards />} />
-{
-  /* <Route path="/mainform" element={<MainForm />} />  */
-}
-{
-  /* <Route path="/specialoffer" element={<SpecialOfferForm />} />  */
-}
-
-
 import React, { useContext, useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
@@ -71,46 +5,54 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-// import Dashboarcampaigns from "../../pages/dashboard/campaignDashboard";
+
+// Components
 import Dashboard from "../../pages/dashboard/dashboard";
-import ReferralsRewards from "../../pages/referralsRewards/referralsRewards";
-import EarningRedemption from "../../pages/earningRedemptions/earningRedemption";
 import Login from "../../pages/auth/Login";
 import Forgot from "../../pages/auth/Forgot";
-import PushupNotification from "../../pages/pushupNotification/pushupNotification";
-import { UserContext } from "../../utils/UseContext/useContext";
 import Error from "../../pages/Errror/error";
-import MainForm from "../../pages/dashboard/mainForm";
-import SpecialOfferForm from "../../pages/specialOffer/specialOfferForm";
 import CampaignForm from "../../pages/dashboard/campaignForm";
-import Product from "../../pages/product/product";
+import { UserContext } from "../../utils/UseContext/useContext";
 
 const AppRoutes = () => {
   const { AuthLocal, setAuthLocal } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Load authentication status from sessionStorage on refresh.
+   * Without this, routes will redirect before state is restored.
+   */
   useEffect(() => {
-    const getValue = sessionStorage.getItem("Auth");
-    setAuthLocal(getValue);
+    const authValue = sessionStorage.getItem("Auth");
+    setAuthLocal(authValue);
     setLoading(false);
   }, [setAuthLocal]);
 
+  // Prevent UI flicker while checking authentication state
   if (loading) return null;
 
-  // Protected route wrapper
-  const PrivateRoute = ({ children }) => {
-    return AuthLocal ? children : <Navigate to="/" replace />;
-  };
+  /**
+   * Protected Route Wrapper
+   * If user is not authenticated → redirect to login page.
+   * Used to protect dashboard and internal pages.
+   */
+  const PrivateRoute = ({ children }) =>
+    AuthLocal ? children : <Navigate to="/" replace />;
 
   return (
     <Router>
       <Routes>
-        {/* Public Routes */}
+        {/* ================= PUBLIC ROUTES ================= */}
+
+        {/* Login Page */}
         <Route path="/" element={<Login />} />
+
+        {/* Forgot Password */}
         <Route path="/forgot" element={<Forgot />} />
 
-        {/* Protected Routes */}
-        
+        {/* ================= PROTECTED ROUTES ================= */}
+
+        {/* Dashboard (Requires Login) */}
         <Route
           path="/dashboard"
           element={
@@ -119,64 +61,65 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+
+        {/* Campaign Form (Requires Login) */}
         <Route
           path="/campaignform"
           element={
-            <PrivateRoute>
+             <PrivateRoute>
               <CampaignForm />
             </PrivateRoute>
           }
         />
-        <Route
+
+        {/* <Route
           path="/referrals"
           element={
             <PrivateRoute>
               <ReferralsRewards />
-            </PrivateRoute>
+           </PrivateRoute>
           }
-        />
-        <Route
+        /> */}
+
+        {/* <Route
           path="/earnings"
           element={
             <PrivateRoute>
               <EarningRedemption />
-            </PrivateRoute>
+             </PrivateRoute>
           }
-        />
-        <Route
+        /> */}
+
+        {/* <Route
           path="/notifications"
           element={
             <PrivateRoute>
               <PushupNotification />
-            </PrivateRoute>
+             </PrivateRoute>
           }
-        />
-        <Route
-          path="/mainform"
-          element={
-            <PrivateRoute>
-              <MainForm />
-            </PrivateRoute>
-          }
-        />
-        <Route
+        /> */}
+
+        {/* <Route
           path="/specialoffer"
           element={
             <PrivateRoute>
               <SpecialOfferForm />
-            </PrivateRoute>
+             </PrivateRoute>
           }
-        />
-        <Route
+        /> */}
+
+        {/* <Route
           path="/product"
           element={
             <PrivateRoute>
               <Product />
             </PrivateRoute>
           }
-        />
+        /> */}
 
-        {/* Catch-all for unknown routes */}
+        {/* ================= 404 CATCH-ALL ================= */}
+
+        {/* Handles all unknown or invalid route paths */}
         <Route path="*" element={<Error />} />
       </Routes>
     </Router>
