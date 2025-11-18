@@ -66,9 +66,9 @@ const AppRoutes = () => {
         <Route
           path="/campaignform"
           element={
-             <PrivateRoute>
+            //  <PrivateRoute>
               <CampaignForm />
-            </PrivateRoute>
+            // </PrivateRoute>
           }
         />
 
